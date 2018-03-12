@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">DeveloperTranslater</string>
+  <string name="app_name">Developer Translater</string>
   <string name="translateButton_text">Translate</string>
   <string name="guideInputText">Input original string to below</string>
   <string name="translateTextView_text">Translated string will present here</string>
