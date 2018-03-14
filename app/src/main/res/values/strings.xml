@@ -1,6 +1,4 @@
 <resources>
-  <string name="naver_api_client_id">apaShxAPOVRY4Rm_auHO</string>
-  <string name="naver_api_client_secret">Gjkp5UpH5o</string>
   <string name="app_name">Developer Translater</string>
   <string name="translateButton_text">Translate</string>
   <string name="guideInputText">Input original string to below</string>
