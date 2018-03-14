@@ -2,6 +2,8 @@ package com.tistory.deque.developertranslater;
 
 /**
  * Created by Oh seunghoon on 2018-03-14.
+ * String translating class.
+ * This class extends [AsyncTask] which execute thread for providing network task.
  */
 
 import android.os.AsyncTask;
@@ -19,23 +21,32 @@ import java.net.URLEncoder;
 
 public class TranslateAsyncTask extends AsyncTask<String, String, String> {
   private final String TAG = "TranslateAsyncTask";
-
-  private String resultString;
-  private TextView translateTextView;
-
   private final String clientId = "apaShxAPOVRY4Rm_auHO";
   private final String clientSecret = "Gjkp5UpH5o";
 
-  public TranslateAsyncTask(TextView translateTextView) {
+  private String resultString;
+  private TextView translateTextView;
+  private String sourceLang;
+  private String targetLang;
+
+
+  public TranslateAsyncTask(TextView translateTextView, String sourceLang, String targetLang) {
+    /**
+     * translateTextView : TextView that translated text is display
+     * sourceLang : Source string's Language
+     * targetLang : Target string's Language
+     */
     super();
     this.setTranslateTextView(translateTextView);
+    this.sourceLang = sourceLang;
+    this.targetLang = targetLang;
   }
 
   @Override
   protected String doInBackground(String... strings) {
     try{
       StringBuffer response = getHttpResponseFromPapagoAPI(strings[0]);
-      String translatedText = jsonToText(new JSONObject(response.toString())));
+      String translatedText = jsonToText(new JSONObject(response.toString()));
       setResultString(translatedText);
       Log.d(TAG, "Translate success");
     }
@@ -53,6 +64,10 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
   }
 
   private StringBuffer getHttpResponseFromPapagoAPI(String input){
+    /**
+     * Post Http request to NAVER, and get Http response from Naver by String Buffer(JSON's fromat).
+     * Additional, if response code is 200, it means 'success', if other, it means 'fail'.
+     */
     StringBuffer response = new StringBuffer();
     try{
       String text = URLEncoder.encode(input, "UTF-8");
@@ -65,7 +80,7 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
       con.setRequestProperty("X-Naver-Client-Secret", getClientSecret());
       Log.d(TAG, "connection Success");
       // post request
-      String postParams = "source=en&target=ko&text=" + text;
+      String postParams = "source=" + sourceLang + "&target=" + targetLang + "&text=" + text;
       Log.d(TAG, "Post Parameter : " + postParams);
       con.setDoOutput(true);
       Log.d(TAG, "set do ouput");
@@ -103,6 +118,9 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
   }
 
   private String jsonToText(JSONObject jsonObject){
+    /**
+     * Input json object to text we wanted.
+     */
     String result;
     try{
       result = jsonObject.getJSONObject("message").getJSONObject("result").getString("translatedText");

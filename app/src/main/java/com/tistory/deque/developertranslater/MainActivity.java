@@ -28,19 +28,19 @@ public class MainActivity extends AppCompatActivity {
     translateButton = findViewById(R.id.translateButton);
     translateTextView = findViewById(R.id.translateTextView);
 
-    inputEditText.clearFocus(); //앱을 켰을때 텍스트편집뷰에 포커스가 가면 화면을 가린다. 따라서 포커스를 제거
+    inputEditText.clearFocus(); //if focus on, keyboard will hide display
   }
 
   public void clickTranslateButton(View view){
-    String originalString = inputEditText.getText().toString();
+    originalString = inputEditText.getText().toString();
     try{
       ConnectivityManager connectivityManager =
         (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
       NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-      if(networkInfo != null && networkInfo.isConnected()){ //인터넷에 연결 가능한지 체크
-        new TranslateAsyncTask(translateTextView).execute(originalString);
-        //안드로이드는 메인 스레드에서 네트워크에 접근할 수 없다.
-        //따라서 AsyncTask를 상속받은 TranslateAsyncTask클래스의 스레드를 호출
+      if(networkInfo != null && networkInfo.isConnected()){ //check Internet connection
+        new TranslateAsyncTask(translateTextView, "en", "ko").execute(originalString);
+        //Android is not connect network main thread
+        //So call TranslateAsyncTask which extends AsyncTask. It execute new thread for connecting network.
       }
       else{
         Toast.makeText(getApplicationContext(), "NETWORK IS NOT CONNECTED", Toast.LENGTH_LONG).show();
