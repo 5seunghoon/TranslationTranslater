@@ -11,14 +11,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
   EditText inputEditText;
   Button translateButton;
-  TextView translateTextView;
+  EditText translateTextView;
   String originalString;
   InputMethodManager imm;
 
@@ -29,16 +28,32 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+
     inputEditText = findViewById(R.id.inputEditText);
     translateButton = findViewById(R.id.translateButton);
     translateTextView = findViewById(R.id.translateTextView);
 
     imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
+    Intent onIntent = getIntent();
+    sharedToMe(onIntent);
 
-    inputEditText.clearFocus(); //if focus on, keyboard will hide display
+    inputEditText.clearFocus(); //when create activity, we must hide keyboard
   }
 
+  public void sharedToMe(Intent intent){
+    /**
+     * If user click share on other app, android will show this app.
+     * And if user click this app, this app will set [original text] to [user's picked text].
+     */
+    String onAction = intent.getAction();
+    String onType = intent.getType();
+    if (Intent.ACTION_SEND.equals(onAction) && onType != null) {
+      if ("text/plain".equals(onType)) {
+        inputEditText.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
+      }
+    }
+  }
   public void clickTranslateButton(View view){
     originalString = inputEditText.getText().toString();
     try{
@@ -68,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     String translatedString = translateTextView.getText().toString();
     Intent shareIntent = new Intent();
     shareIntent.setAction(Intent.ACTION_SEND);
-    shareIntent.setType("text/plan");
+    shareIntent.setType("text/plain");
     shareIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.app_name));
     shareIntent.putExtra(Intent.EXTRA_TEXT,translatedString + "\n - translated by " + getString(R.string.app_name));
     startActivity(Intent.createChooser(shareIntent, "번역 결과 공유하기"));
