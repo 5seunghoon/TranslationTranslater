@@ -1,4 +1,4 @@
-package com.tistory.deque.developertranslater;
+package com.tistory.deque.translationtranslater;
 
 import org.junit.Test;
 
