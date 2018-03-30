@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
   private static final int REQUEST_IMAGE_CROP = 103;
   private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
   private static final int MULTIPLE_PERMISSIONS = 200; //권한 동의 여부 문의 후 CallBack 함수에 쓰일 변수
-  Uri imageUri, photoURI, albumURI;
+  Uri imageUri, cropSoureURI, cropEndURI;
   String mCurrentPhotoPath;
 
   EditText inputEditText;
@@ -74,9 +74,13 @@ public class MainActivity extends AppCompatActivity {
         if(resultCode == Activity.RESULT_OK){
           try{
             Log.d(tag, "REQUEST TAKE PHOTO OK");
-            galleryAddPic();
-
-            iv_view.setImageURI(imageUri);
+            File albumFile = null;
+            albumFile = createImageFile();
+            //cropImage(): cropSoureURI 위치의 파일을 잘라서 cropEndURI로 저장
+            //따라서 imageURI에 담겨있는 파일위치를 자를 것이기 때문에 cropSoureURI imageURI를 저장해야 함
+            cropSoureURI = imageUri;
+            cropEndURI = Uri.fromFile(albumFile);
+            cropImage();
           } catch (Exception e){
             Log.e(tag, "REQUEST TAKE PHOTO" + e.toString());
           }
@@ -92,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
             try{
               File albumFile = null;
               albumFile = createImageFile();
-              photoURI = data.getData();
-              albumURI = Uri.fromFile(albumFile);
+              cropSoureURI = data.getData();
+              cropEndURI = Uri.fromFile(albumFile);
               cropImage();
             } catch (Exception e){
               Log.e(tag, "REQUEST TAKE ALBUM" + e.toString());
@@ -103,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
         break;
       case REQUEST_IMAGE_CROP:
         if(resultCode == Activity.RESULT_OK){
-          galleryAddPic();;
-          iv_view.setImageURI(albumURI);
+          galleryAddPic();
+          iv_view.setImageURI(cropEndURI);
         }
         break;
     }
@@ -244,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
         if(photoFile != null){
           Log.d(tag, "photo file make success");
           //make photo file success
-          Uri providerURI = FileProvider.getUriForFile(this, getPackageName(), photoFile);
+          Uri providerURI = FileProvider.getUriForFile(this, "com.tistory.deque.translationtranslater", photoFile);
           Log.d(tag, "providerURI : " + providerURI);
           imageUri = providerURI;
           takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerURI);
@@ -295,21 +299,25 @@ public class MainActivity extends AppCompatActivity {
     Uri contentUri = Uri.fromFile(f);
     mediaScanIntent.setData(contentUri);
     sendBroadcast(mediaScanIntent);
-    Toast.makeText(this, "사진이 앨범에 저장되었습니다", Toast.LENGTH_LONG).show();
+    //Toast.makeText(this, "사진이 앨범에 저장되었습니다", Toast.LENGTH_LONG).show();
   }
   public void cropImage(){
+    /**
+     * cropSoureURI = 자를 uri
+     * cropEndURI = 자르고 난뒤 uri
+     */
     Log.d(tag, "cropImage() CALL");
-    Log.d(tag, "cropImage() : Photo URI, Album URI" + photoURI + ", " + albumURI);
+    Log.d(tag, "cropImage() : Photo URI, Album URI" + cropSoureURI + ", " + cropEndURI);
 
     Intent cropIntent = new Intent("com.android.camera.action.CROP");
 
     cropIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
     cropIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-    cropIntent.setDataAndType(photoURI, "image/*");
-    cropIntent.putExtra("aspectX", 1);
-    cropIntent.putExtra("aspectY", 1);
-    cropIntent.putExtra("scale", true);
-    cropIntent.putExtra("output", albumURI);
+    cropIntent.setDataAndType(cropSoureURI, "image/*");
+    //cropIntent.putExtra("aspectX", 1);
+    //cropIntent.putExtra("aspectY", 1);
+    //cropIntent.putExtra("scale", true);
+    cropIntent.putExtra("output", cropEndURI);
 
     startActivityForResult(cropIntent, REQUEST_IMAGE_CROP);
   }
