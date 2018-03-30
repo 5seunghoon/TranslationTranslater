@@ -16,33 +16,54 @@ import java.io.InputStream;
  */
 
 public class ocrTask {
-  public Context context;
-  public String encodedImage;
+  /**
+   * 1. make ocrTask Class by context
+   * 2. set Image URI
+   * 3. call RUN()
+   */
+  private Context context;
+  private Uri imageUri;
+  private String encodedImageString;
+  private String resultOCRString = "NULL_TEXT";
   
-  static String tag = "OCR TASK";
+  static private String tag = "ocrTaskClass";
 
   public ocrTask(Context context) {
     this.context = context;
   }
-  public String imageUriToBase64(Uri imageUri){
-    if(imageUri == null) return "";
+
+  public void setImageURI(Uri imageUri){
+    this.imageUri = imageUri;
+    Log.d(tag, "image uri set success");
+  }
+
+  public String RUN(){
+    Log.d(tag, "RUN OCR TASK");
+    imageUriToBase64();
+    return VisionAPI();
+  }
+
+  private void imageUriToBase64(){
+    if(imageUri == null){
+      Log.d(tag, "image uri is empty");
+      return;
+    }
+    Log.d(tag, "start image uri to base 64");
     final InputStream imageStream;
     try {
       imageStream = context.getContentResolver().openInputStream(imageUri);
       final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
       Log.d(tag, "COMPELETE BITMAP");
-      encodedImage = encodeImage(selectedImage);
+      encodedImageString = encodeImage(selectedImage);
       Log.d(tag, "COMPELETE ENCODE");
-      Log.d(tag, "ENCODE : "+ encodedImage);
+      Log.d(tag, "ENCODE : "+ encodedImageString);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
-    }finally {
-      return encodedImage;
     }
   }
-  public String bitmapToBase64(Bitmap captureBitmap){
-    encodedImage = encodeImage(captureBitmap);
-    return encodedImage;
+  private String bitmapToBase64(Bitmap captureBitmap){
+    encodedImageString = encodeImage(captureBitmap);
+    return encodedImageString;
   }
   private String encodeImage(Bitmap bm)
   {
@@ -52,5 +73,9 @@ public class ocrTask {
     String encImage = Base64.encodeToString(b, Base64.DEFAULT);
 
     return encImage;
+  }
+
+  private String VisionAPI(){
+    return resultOCRString;
   }
 }

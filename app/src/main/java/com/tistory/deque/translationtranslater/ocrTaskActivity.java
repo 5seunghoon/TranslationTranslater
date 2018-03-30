@@ -17,7 +17,6 @@ public class ocrTaskActivity extends AppCompatActivity {
   private TextView textView;
 
   private Uri resultImageURI;
-  private String base64Encoded;
   private static String tag = "ocrTaskActivityTAG";
 
   @Override
@@ -29,6 +28,9 @@ public class ocrTaskActivity extends AppCompatActivity {
     imageView = findViewById(R.id.imageView);
     textView = findViewById(R.id.textView);
 
+    ocr();
+  }
+  private void ocr(){
     Log.d(tag, "getBase64Encoded func");
     Intent intent = getIntent();
     resultImageURI = (Uri) intent.getExtras().get("IMAGE_URI");
@@ -37,7 +39,8 @@ public class ocrTaskActivity extends AppCompatActivity {
 
     ocrTask _ocrTask = new ocrTask(getApplicationContext());
     Log.d(tag, "ocrTask success make");
-    textView.setText(_ocrTask.imageUriToBase64(resultImageURI));
-  }
 
+    _ocrTask.setImageURI(resultImageURI);
+    textView.setText(_ocrTask.RUN());
+  }
 }
