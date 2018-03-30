@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
     imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
+    checkPermissions();
+
     Intent onIntent = getIntent();
     sharedToMe(onIntent);
 
@@ -160,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
 
   private void showNoPermissionToastAndFinish() {
     Toast.makeText(this, "권한 요청에 동의 해주셔야 이용 가능합니다. 설정에서 권한 허용 하시기 바랍니다.", Toast.LENGTH_SHORT).show();
-    finish();
   }
 
   private boolean checkPermissions() {
@@ -231,17 +232,25 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void clickCameraButton(View view) {
-    checkPermissions();
-    Log.d(tag, "check permission end");
-    captureCamera();
-    Log.d(tag, "capture camera func end");
+    if(checkPermissions()){
+      Log.d(tag, "check permission end");
+      captureCamera();
+      Log.d(tag, "capture camera func end");
+    }
+    else{
+      return;
+    }
   }
 
   public void clickGalleryButton(View view){
-    checkPermissions();
-    Log.d(tag, "check permission end");
-    getAlbum();
-    Log.d(tag, "get album func end");
+    if(checkPermissions()){
+      Log.d(tag, "check permission end");
+      getAlbum();
+      Log.d(tag, "get album func end");
+    }
+    else{
+      return;
+    }
   }
   private void captureCamera(){
     String state = Environment.getExternalStorageState();
