@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -24,18 +25,23 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
   private static final int REQUEST_TAKE_PHOTO = 101;
   private static final int REQUEST_TAKE_ALBUM = 102;
   private static final int REQUEST_IMAGE_CROP = 103;
-  private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
   private static final int MULTIPLE_PERMISSIONS = 200; //권한 동의 여부 문의 후 CallBack 함수에 쓰일 변수
+
+  private static final int MAX_widthMulHeight = 600000;
+
+  private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+
   Uri imageUri, cropSoureURI, cropEndURI;
   String mCurrentPhotoPath;
 
@@ -108,10 +114,16 @@ public class MainActivity extends AppCompatActivity {
       case REQUEST_IMAGE_CROP:
         if(resultCode == Activity.RESULT_OK){
           galleryAddPic();
-          iv_view.setImageURI(cropEndURI);
+          startOcrTaskActivity(cropEndURI);
         }
         break;
     }
+  }
+
+  public void startOcrTaskActivity(Uri resultImageUri){
+    Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), ocrTaskActivity.class);
+    ocrTaskActivityIntent.putExtra("IMAGE_URI", resultImageUri);
+    startActivity(ocrTaskActivityIntent);
   }
 
   /** 이하 권한 **/
@@ -300,6 +312,8 @@ public class MainActivity extends AppCompatActivity {
     mediaScanIntent.setData(contentUri);
     sendBroadcast(mediaScanIntent);
     //Toast.makeText(this, "사진이 앨범에 저장되었습니다", Toast.LENGTH_LONG).show();
+
+    resizingImage();
   }
   public void cropImage(){
     /**
@@ -318,7 +332,49 @@ public class MainActivity extends AppCompatActivity {
     //cropIntent.putExtra("aspectY", 1);
     //cropIntent.putExtra("scale", true);
     cropIntent.putExtra("output", cropEndURI);
-
     startActivityForResult(cropIntent, REQUEST_IMAGE_CROP);
+  }
+  public void resizingImage(){
+    Log.d(tag, "call resizing image");
+    int org_width, org_height;
+    int result_width, result_height;
+
+
+    Bitmap srcBmp;
+    //srcBmp = BitmapFactory.decodeFile(cropEndURI.getPath());
+    try{
+      srcBmp = MediaStore.Images.Media.getBitmap(getContentResolver(), cropEndURI);
+    } catch (Exception e){
+      Log.d(tag, "bitmap load exception : " + e.toString());
+      return;
+    }
+    Log.d(tag, "Bitmap load success");
+    org_width = srcBmp.getWidth();
+    org_height = srcBmp.getHeight();
+
+    if(MAX_widthMulHeight < org_height * org_width){
+      float rate = org_height * org_width / MAX_widthMulHeight;
+      Log.d(tag, "orginal width : " + org_width + " , orginal height : " + org_height);
+      Log.d(tag, "it is big iamge. resizing " + rate + " percent.");
+      result_width = (int) (org_height / rate);
+      result_height = (int) (org_width / rate);
+
+      FileOutputStream fosObj;
+
+      try {
+        Log.d(tag, "resizing start : " + result_height + " , " + result_width);
+        Bitmap resizedBmp = Bitmap.createScaledBitmap(srcBmp, result_width, result_height, true);
+        Log.d(tag, "resizing");
+        fosObj = new FileOutputStream(cropEndURI.getPath());
+        Log.d(tag, "get file output stream");
+        resizedBmp.compress(Bitmap.CompressFormat.JPEG, 100, fosObj);
+        Log.d(tag, "rewrite");
+        fosObj.flush();
+        fosObj.close();
+      } catch (Exception e){
+        Log.d(tag, "file write exception : " + e.toString());
+      }
+    }
+
   }
 }

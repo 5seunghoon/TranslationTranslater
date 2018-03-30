@@ -1,7 +1,6 @@
 package com.tistory.deque.translationtranslater;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -17,21 +16,17 @@ import java.io.InputStream;
  */
 
 public class ocrTask {
-  public Intent data;
-  public Uri imageUri;
   public Context context;
   public String encodedImage;
   
   static String tag = "OCR TASK";
 
-  public ocrTask(Bitmap bitmap, Context context) {
-    this.data = data;
+  public ocrTask(Context context) {
     this.context = context;
   }
-  public String imageUriToBase64(){
+  public String imageUriToBase64(Uri imageUri){
     if(imageUri == null) return "";
     final InputStream imageStream;
-    imageUri = data.getData();
     try {
       imageStream = context.getContentResolver().openInputStream(imageUri);
       final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
@@ -45,8 +40,7 @@ public class ocrTask {
       return encodedImage;
     }
   }
-  public String bitmapToBase64(){
-    Bitmap captureBitmap = (Bitmap) data.getExtras().get("data");
+  public String bitmapToBase64(Bitmap captureBitmap){
     encodedImage = encodeImage(captureBitmap);
     return encodedImage;
   }
