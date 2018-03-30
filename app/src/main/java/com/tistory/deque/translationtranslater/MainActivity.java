@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -50,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
   EditText translateTextView;
   String originalString;
   InputMethodManager imm;
-  ImageView iv_view;
 
   String tag = "mainActivityTAG";
 
@@ -62,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     inputEditText = findViewById(R.id.inputEditText);
     translateButton = findViewById(R.id.translateButton);
     translateTextView = findViewById(R.id.translateTextView);
-    iv_view = findViewById(R.id.imageView);
 
     imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -73,6 +70,51 @@ public class MainActivity extends AppCompatActivity {
 
     inputEditText.clearFocus(); //when create activity, we must hide keyboard
   }
+
+
+  public void sharedToMe(Intent intent){
+    /**
+     * If user click share on other app, android will show this app.
+     * And if user click this app, this app will set [original text] to [user's picked text].
+     */
+    String onAction = intent.getAction();
+    String onType = intent.getType();
+    if (Intent.ACTION_SEND.equals(onAction) && onType != null) {
+      if ("text/plain".equals(onType)) {
+        inputEditText.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
+      }
+    }
+  }
+
+  public void startOcrTaskActivity(Uri resultImageUri){
+    Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), ocrTaskActivity.class);
+    ocrTaskActivityIntent.putExtra("IMAGE_URI", resultImageUri);
+    startActivity(ocrTaskActivityIntent);
+  }
+
+  /** --- **/
+
+
+  /**
+   * 카메라 버튼을 클릭했을 때,
+   * 1. 권한 체크
+   * 2. 카메라를 찍을수 있는 intent를 만들어서 startActivityForResult
+   * 2-1. 이때 사진을 찍어서 그걸 저장할 photoFile을 만들고,
+   * 2-2. 이 photoFile로 providerURI를 만든 뒤, imageURI에도 저장
+   * 2-3. 카메라를 찍을수 있는 intent를 만들고
+   * 2-4. providerURI를 MediaStore.EXTRA_OUTPUT를 키로 intent에 넣고 startActivityForResult
+   * 3. 카메라로 찍으면 onActivityResult에서 크롭할 준비를 함
+   * 3-1. 크롭하기 전 이미지의 URI와 크롭된 이미지를 저장할 URI를 준비한뒤 cropImage()호출
+   * 3-2. "com.android.camera.action.CROP"액션, 인텐트에 output로 저장될 URI를 지정해준 뒤 intent startActivityForResult
+   * 3-3. galleryAddPic()이 호출되면서 미디어 스캔을 실시
+   * 4. 그 URI를 들고 ocrTaskActivity를 start
+   *
+   * 갤러리 버튼을 클릭했을 때,
+   * 1. 권한 체크
+   * 2. Intent.ACTION_PICK의 액션과 image를 타입으로 지정해주고 startActivityForResult
+   * 3. 카메라 때와 마찬가지로 cropimage를 호출하되, 크롭할 이미지의 URI는 intent.getdata로 바로 받아옴
+   * 4. 카메라 때와 마찬가지로 미디어스캔 후 ocrTaskActivity를 시작
+   */
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -115,85 +157,11 @@ public class MainActivity extends AppCompatActivity {
         break;
       case REQUEST_IMAGE_CROP:
         if(resultCode == Activity.RESULT_OK){
+          resizingImage();
           galleryAddPic();
           startOcrTaskActivity(cropEndURI);
         }
         break;
-    }
-  }
-
-  public void startOcrTaskActivity(Uri resultImageUri){
-    Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), ocrTaskActivity.class);
-    ocrTaskActivityIntent.putExtra("IMAGE_URI", resultImageUri);
-    startActivity(ocrTaskActivityIntent);
-  }
-
-  /** 이하 권한 **/
-
-  @Override
-  public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-    switch (requestCode) {
-      case MULTIPLE_PERMISSIONS: {
-        if (grantResults.length > 0) {
-          for (int i = 0; i < permissions.length; i++) {
-            if (permissions[i].equals(this.permissions[0])) {
-              if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                showNoPermissionToastAndFinish();
-              }
-            } else if (permissions[i].equals(this.permissions[1])) {
-              if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                showNoPermissionToastAndFinish();
-
-              }
-            } else if (permissions[i].equals(this.permissions[2])) {
-              if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                showNoPermissionToastAndFinish();
-
-              }
-            }
-          }
-        } else {
-          showNoPermissionToastAndFinish();
-        }
-        return;
-      }
-    }
-  }
-
-  private void showNoPermissionToastAndFinish() {
-    Toast.makeText(this, "권한 요청에 동의 해주셔야 이용 가능합니다. 설정에서 권한 허용 하시기 바랍니다.", Toast.LENGTH_SHORT).show();
-  }
-
-  private boolean checkPermissions() {
-    Log.d(tag, "check permissions func in");
-    int result;
-    List<String> permissionList = new ArrayList<>();
-    for (String pm : permissions) {
-      result = ContextCompat.checkSelfPermission(this, pm);
-      if (result != PackageManager.PERMISSION_GRANTED) { //사용자가 해당 권한을 가지고 있지 않을 경우 리스트에 해당 권한명 추가
-        permissionList.add(pm);
-      }
-    }
-    if (!permissionList.isEmpty()) { //권한이 추가되었으면 해당 리스트가 empty가 아니므로 request 즉 권한을 요청합니다.
-      ActivityCompat.requestPermissions(this, permissionList.toArray(new String[permissionList.size()]), MULTIPLE_PERMISSIONS);
-      return false;
-    }
-    return true;
-  }
-
-  /** --- **/
-
-  public void sharedToMe(Intent intent){
-    /**
-     * If user click share on other app, android will show this app.
-     * And if user click this app, this app will set [original text] to [user's picked text].
-     */
-    String onAction = intent.getAction();
-    String onType = intent.getType();
-    if (Intent.ACTION_SEND.equals(onAction) && onType != null) {
-      if ("text/plain".equals(onType)) {
-        inputEditText.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
-      }
     }
   }
   public void clickTranslateButton(View view){
@@ -314,15 +282,13 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void galleryAddPic(){
-    Log.d(tag, "galleryAddPic");
+    Log.d(tag, "galleryAddPic, do media scan");
     Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
     File f = new File(mCurrentPhotoPath);
     Uri contentUri = Uri.fromFile(f);
     mediaScanIntent.setData(contentUri);
     sendBroadcast(mediaScanIntent);
-    //Toast.makeText(this, "사진이 앨범에 저장되었습니다", Toast.LENGTH_LONG).show();
-
-    resizingImage();
+    Log.d(tag, "media scanning end");
   }
   public void cropImage(){
     /**
@@ -384,6 +350,60 @@ public class MainActivity extends AppCompatActivity {
         Log.d(tag, "file write exception : " + e.toString());
       }
     }
-
   }
+
+
+  /** 이하 권한 **/
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    switch (requestCode) {
+      case MULTIPLE_PERMISSIONS: {
+        if (grantResults.length > 0) {
+          for (int i = 0; i < permissions.length; i++) {
+            if (permissions[i].equals(this.permissions[0])) {
+              if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                showNoPermissionToastAndFinish();
+              }
+            } else if (permissions[i].equals(this.permissions[1])) {
+              if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                showNoPermissionToastAndFinish();
+
+              }
+            } else if (permissions[i].equals(this.permissions[2])) {
+              if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                showNoPermissionToastAndFinish();
+
+              }
+            }
+          }
+        } else {
+          showNoPermissionToastAndFinish();
+        }
+        return;
+      }
+    }
+  }
+
+  private void showNoPermissionToastAndFinish() {
+    Toast.makeText(this, "권한 요청에 동의 해주셔야 이용 가능합니다. 설정에서 권한 허용 하시기 바랍니다.", Toast.LENGTH_SHORT).show();
+  }
+
+  private boolean checkPermissions() {
+    Log.d(tag, "check permissions func in");
+    int result;
+    List<String> permissionList = new ArrayList<>();
+    for (String pm : permissions) {
+      result = ContextCompat.checkSelfPermission(this, pm);
+      if (result != PackageManager.PERMISSION_GRANTED) { //사용자가 해당 권한을 가지고 있지 않을 경우 리스트에 해당 권한명 추가
+        permissionList.add(pm);
+      }
+    }
+    if (!permissionList.isEmpty()) { //권한이 추가되었으면 해당 리스트가 empty가 아니므로 request 즉 권한을 요청합니다.
+      ActivityCompat.requestPermissions(this, permissionList.toArray(new String[permissionList.size()]), MULTIPLE_PERMISSIONS);
+      return false;
+    }
+    return true;
+  }
+
 }

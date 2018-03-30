@@ -2,11 +2,9 @@ package com.tistory.deque.translationtranslater;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,9 +26,7 @@ import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,14 +48,8 @@ public class ocrTask {
   private static final int MAX_LABEL_RESULTS = 10;
   private static final int MAX_DIMENSION = 1200;
 
-  private static final int GALLERY_PERMISSIONS_REQUEST = 0;
-  private static final int GALLERY_IMAGE_REQUEST = 1;
-  public static final int CAMERA_PERMISSIONS_REQUEST = 2;
-  public static final int CAMERA_IMAGE_REQUEST = 3;
-
   private Context context;
   private Uri imageUri;
-  private String encodedImageString;
   private TextView mImageDetails;
   private ImageView mMainImage;
   private String resultOCRString = "읽는중.... 기다려주세요....";
@@ -89,39 +79,16 @@ public class ocrTask {
     return VisionAPI();
   }
 
-  private void imageUriToBase64(){
-    if(imageUri == null){
-      Log.d(tag, "image uri is empty");
-      return;
-    }
-    Log.d(tag, "start image uri to base 64");
-    final InputStream imageStream;
-    try {
-      imageStream = context.getContentResolver().openInputStream(imageUri);
-      final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-      Log.d(tag, "COMPELETE BITMAP");
-      encodedImageString = encodeImage(selectedImage);
-      Log.d(tag, "COMPELETE ENCODE");
-      Log.d(tag, "ENCODE : "+ encodedImageString);
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    }
-  }
-  private String bitmapToBase64(Bitmap captureBitmap){
-    encodedImageString = encodeImage(captureBitmap);
-    return encodedImageString;
-  }
-  private String encodeImage(Bitmap bm)
-  {
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    bm.compress(Bitmap.CompressFormat.JPEG,100,baos);
-    byte[] b = baos.toByteArray();
-    String encImage = Base64.encodeToString(b, Base64.DEFAULT);
-
-    return encImage;
-  }
-
   private String VisionAPI(){
+    /**
+     * 1. uri로부터 이미지 들고와서 bitmap을 만든 다음 callCloudVision() 콜 (사이즈가 크면 리사이징 먼저)
+     * 2. textDetectionTask를 만들고, 그 task를 execute. (이 task는 스래드임.)
+     * 2-1. textDetectionTask의 인자인 annotationRequest는 구글로 보낼 request를 만드는 함수
+     * 2-2. textDetectionTask는 execute되면 doInBackground를 실행
+     * 3. doInBackground에서 구글로 request를 하고, message를 받으면 convertRequestToString()을 콜
+     * 4. convertRequestToString()으로 반환된 string은 onPostExecute의 인자로 들어감 (onPostExecute는 스래드가 끝나면 콜백되는 함수)
+     * 5. onPostExecute에서 미리 세팅된 textView의 text로 setting됨.
+     */
     Log.d(tag, "visionapi func");
     uploadImage(imageUri);
     return resultOCRString;
@@ -151,6 +118,7 @@ public class ocrTask {
     }
   }
   private Bitmap scaleBitmapDown(Bitmap bitmap, int maxDimension) {
+    Log.d(tag, "scale bitmap down");
 
     int originalWidth = bitmap.getWidth();
     int originalHeight = bitmap.getHeight();
@@ -176,8 +144,8 @@ public class ocrTask {
 
     // Do the real work in an async task, because we need to use the network anyway
     try {
-      AsyncTask<Object, Void, String> labelDetectionTask = new LableDetectionTask(mImageDetails, prepareAnnotationRequest(bitmap));
-      labelDetectionTask.execute();
+      AsyncTask<Object, Void, String> textDetectionTask = new TextDetectionTask(mImageDetails, prepareAnnotationRequest(bitmap));
+      textDetectionTask.execute();
     } catch (IOException e) {
       Log.d(tag, "failed to make API request because of other IOException " +
         e.getMessage());
@@ -186,6 +154,10 @@ public class ocrTask {
 
 
   private Vision.Images.Annotate prepareAnnotationRequest(final Bitmap bitmap) throws IOException {
+    /**
+     * make request.
+     * put image, type, packagename.. etc
+     */
     Log.d(tag,"prepareAnnotationRequest func");
     HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
     JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
@@ -261,11 +233,11 @@ public class ocrTask {
 
 
 
-  private static class LableDetectionTask extends AsyncTask<Object, Void, String> {
+  private static class TextDetectionTask extends AsyncTask<Object, Void, String> {
     private TextView mImageDetails;
     private Vision.Images.Annotate mRequest;
 
-    LableDetectionTask(TextView mImageDetails, Vision.Images.Annotate annotate) {
+    TextDetectionTask(TextView mImageDetails, Vision.Images.Annotate annotate) {
       this.mImageDetails = mImageDetails;
       mRequest = annotate;
     }
@@ -287,6 +259,7 @@ public class ocrTask {
     }
 
     protected void onPostExecute(String result) {
+      Log.d(tag, "GET message from google : " +  result);
       mImageDetails.setText(result);
     }
   }
@@ -298,7 +271,7 @@ public class ocrTask {
     if (labels != null) {
       message.append(labels.get(0).getDescription());
     } else {
-      message.append("nothing");
+      message.append("문자 감식 실패..");
     }
 
     return message.toString();

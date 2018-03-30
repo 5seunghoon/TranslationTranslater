@@ -9,9 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ocrTaskActivity extends AppCompatActivity {
-  private static final int PICK_FROM_ALBUM = 100;
-  private static final int PICK_FROM_CAMERA = 101;
-  private static final int CROP_FROM_CAMERA = 102;
 
   private ImageView imageView;
   private TextView textView;
