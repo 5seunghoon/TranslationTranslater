@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
   private static final int REQUEST_IMAGE_CROP = 103;
   private static final int MULTIPLE_PERMISSIONS = 200; //권한 동의 여부 문의 후 CallBack 함수에 쓰일 변수
 
-  private static final int MAX_widthMulHeight = 600000;
+  private static final int MAX_widthMulHeight = 200000;
 
   private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
@@ -353,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
     org_height = srcBmp.getHeight();
 
     if(MAX_widthMulHeight < org_height * org_width){
-      float rate = org_height * org_width / MAX_widthMulHeight;
+      double rate = Math.sqrt((org_height * org_width) / MAX_widthMulHeight);
       Log.d(tag, "orginal width : " + org_width + " , orginal height : " + org_height);
       Log.d(tag, "it is big iamge. resizing " + rate + " percent.");
       result_width = (int) (org_width / rate);
