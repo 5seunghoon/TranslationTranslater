@@ -1,6 +1,7 @@
 package com.tistory.deque.translationtranslater;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,32 +9,42 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-  private static final int PICK_FROM_ALBUM = 100;
-  private static final int PICK_FROM_CAMERA = 101;
-  private static final int CROP_FROM_CAMERA = 102;
+  private static final int REQUEST_TAKE_PHOTO = 101;
+  private static final int REQUEST_TAKE_ALBUM = 102;
+  private static final int REQUEST_IMAGE_CROP = 103;
   private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
   private static final int MULTIPLE_PERMISSIONS = 200; //권한 동의 여부 문의 후 CallBack 함수에 쓰일 변수
-  Uri photoUri;
+  Uri imageUri, photoURI, albumURI;
+  String mCurrentPhotoPath;
 
   EditText inputEditText;
   Button translateButton;
   EditText translateTextView;
   String originalString;
   InputMethodManager imm;
+  ImageView iv_view;
 
   String tag = "mainActivityTAG";
 
@@ -42,11 +53,10 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    checkPermissions();
-
     inputEditText = findViewById(R.id.inputEditText);
     translateButton = findViewById(R.id.translateButton);
     translateTextView = findViewById(R.id.translateTextView);
+    iv_view = findViewById(R.id.imageView);
 
     imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -59,7 +69,48 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
+    switch (requestCode){
+      case REQUEST_TAKE_PHOTO:
+        if(resultCode == Activity.RESULT_OK){
+          try{
+            Log.d(tag, "REQUEST TAKE PHOTO OK");
+            galleryAddPic();
+
+            iv_view.setImageURI(imageUri);
+          } catch (Exception e){
+            Log.e(tag, "REQUEST TAKE PHOTO" + e.toString());
+          }
+        }
+        else{
+          Toast.makeText(this, "사진찍기를 취소하였습니다.", Toast.LENGTH_LONG).show();
+        }
+        break;
+
+      case REQUEST_TAKE_ALBUM:
+        if(resultCode == Activity.RESULT_OK){
+          if(data.getData() != null){
+            try{
+              File albumFile = null;
+              albumFile = createImageFile();
+              photoURI = data.getData();
+              albumURI = Uri.fromFile(albumFile);
+              cropImage();
+            } catch (Exception e){
+              Log.e(tag, "REQUEST TAKE ALBUM" + e.toString());
+            }
+          }
+        }
+        break;
+      case REQUEST_IMAGE_CROP:
+        if(resultCode == Activity.RESULT_OK){
+          galleryAddPic();;
+          iv_view.setImageURI(albumURI);
+        }
+        break;
+    }
   }
+
+  /** 이하 권한 **/
 
   @Override
   public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -95,6 +146,25 @@ public class MainActivity extends AppCompatActivity {
     Toast.makeText(this, "권한 요청에 동의 해주셔야 이용 가능합니다. 설정에서 권한 허용 하시기 바랍니다.", Toast.LENGTH_SHORT).show();
     finish();
   }
+
+  private boolean checkPermissions() {
+    Log.d(tag, "check permissions func in");
+    int result;
+    List<String> permissionList = new ArrayList<>();
+    for (String pm : permissions) {
+      result = ContextCompat.checkSelfPermission(this, pm);
+      if (result != PackageManager.PERMISSION_GRANTED) { //사용자가 해당 권한을 가지고 있지 않을 경우 리스트에 해당 권한명 추가
+        permissionList.add(pm);
+      }
+    }
+    if (!permissionList.isEmpty()) { //권한이 추가되었으면 해당 리스트가 empty가 아니므로 request 즉 권한을 요청합니다.
+      ActivityCompat.requestPermissions(this, permissionList.toArray(new String[permissionList.size()]), MULTIPLE_PERMISSIONS);
+      return false;
+    }
+    return true;
+  }
+
+  /** --- **/
 
   public void sharedToMe(Intent intent){
     /**
@@ -145,30 +215,102 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void clickCameraButton(View view) {
-    Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), ocrTaskActivity.class);
-    ocrTaskActivityIntent.putExtra("CASE", "CAMERA");
-    startActivity(ocrTaskActivityIntent);
-  }
-  public void clickGalleryButton(View view){
-    Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), ocrTaskActivity.class);
-    ocrTaskActivityIntent.putExtra("CASE", "ALBUM");
-    startActivity(ocrTaskActivityIntent);
-  }
-  private boolean checkPermissions() {
-    Log.d(tag, "check permissions func in");
-    int result;
-    List<String> permissionList = new ArrayList<>();
-    for (String pm : permissions) {
-      result = ContextCompat.checkSelfPermission(this, pm);
-      if (result != PackageManager.PERMISSION_GRANTED) { //사용자가 해당 권한을 가지고 있지 않을 경우 리스트에 해당 권한명 추가
-        permissionList.add(pm);
-      }
-    }
-    if (!permissionList.isEmpty()) { //권한이 추가되었으면 해당 리스트가 empty가 아니므로 request 즉 권한을 요청합니다.
-      ActivityCompat.requestPermissions(this, permissionList.toArray(new String[permissionList.size()]), MULTIPLE_PERMISSIONS);
-      return false;
-    }
-    return true;
+    checkPermissions();
+    Log.d(tag, "check permission end");
+    captureCamera();
+    Log.d(tag, "capture camera func end");
   }
 
+  public void clickGalleryButton(View view){
+    checkPermissions();
+    Log.d(tag, "check permission end");
+    getAlbum();
+    Log.d(tag, "get album func end");
+  }
+  private void captureCamera(){
+    String state = Environment.getExternalStorageState();
+    if(Environment.MEDIA_MOUNTED.equals(state)){
+      Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+      Log.d(tag, "intent takePictureIntent init");
+
+      if(takePictureIntent.resolveActivity(getPackageManager()) != null){
+        Log.d(tag, "if takePictureIntent.resolveActivity(getPackageManager()) != null");
+        File photoFile = null;
+        try{
+          photoFile = createImageFile();
+        } catch (IOException ex){
+          Log.e(tag, "captureCamera Error" + ex.toString());
+        }
+        if(photoFile != null){
+          Log.d(tag, "photo file make success");
+          //make photo file success
+          Uri providerURI = FileProvider.getUriForFile(this, getPackageName(), photoFile);
+          Log.d(tag, "providerURI : " + providerURI);
+          imageUri = providerURI;
+          takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerURI);
+          Log.d(tag, "intent put extra (providerURI) success : " + providerURI);
+          Log.d(tag, "start activity : takepictureintent");
+          startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+        }
+      }
+      else{
+        Toast.makeText(this, "저장공간이 접근 불가능한 기기입니다.", Toast.LENGTH_LONG).show();
+      }
+    }
+  }
+  public File createImageFile() throws IOException {
+    Log.d(tag, "createImageFile func");
+    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+    String imageFileName = "JPEG_" + timeStamp + ".jpg";
+    File imageFile = null;
+    File storageDir = new File(Environment.getExternalStorageDirectory() + "/Pictures", "t2");
+    Log.d(tag, "storageDir : " + storageDir);
+    if (!storageDir.exists()) {
+      Log.d(tag, storageDir.toString() + " is not exist");
+      storageDir.mkdir();
+      Log.d(tag, "storageDir make");
+    }
+    imageFile = new File(storageDir, imageFileName);
+    Log.d(tag, "imageFile init");
+    mCurrentPhotoPath = imageFile.getAbsolutePath();
+    Log.d(tag, "mCurrentPhotoPath : " + mCurrentPhotoPath);
+
+    return imageFile;
+  }
+
+
+  private void getAlbum(){
+    Log.d(tag, "getAlbum()");
+    Intent intent = new Intent(Intent.ACTION_PICK);
+    intent.setType("image/*");
+    intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+    Log.d(tag, "start Activity : album intent");
+    startActivityForResult(intent, REQUEST_TAKE_ALBUM);
+  }
+
+  private void galleryAddPic(){
+    Log.d(tag, "galleryAddPic");
+    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+    File f = new File(mCurrentPhotoPath);
+    Uri contentUri = Uri.fromFile(f);
+    mediaScanIntent.setData(contentUri);
+    sendBroadcast(mediaScanIntent);
+    Toast.makeText(this, "사진이 앨범에 저장되었습니다", Toast.LENGTH_LONG).show();
+  }
+  public void cropImage(){
+    Log.d(tag, "cropImage() CALL");
+    Log.d(tag, "cropImage() : Photo URI, Album URI" + photoURI + ", " + albumURI);
+
+    Intent cropIntent = new Intent("com.android.camera.action.CROP");
+
+    cropIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+    cropIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    cropIntent.setDataAndType(photoURI, "image/*");
+    cropIntent.putExtra("aspectX", 1);
+    cropIntent.putExtra("aspectY", 1);
+    cropIntent.putExtra("scale", true);
+    cropIntent.putExtra("output", albumURI);
+
+    startActivityForResult(cropIntent, REQUEST_IMAGE_CROP);
+  }
 }
