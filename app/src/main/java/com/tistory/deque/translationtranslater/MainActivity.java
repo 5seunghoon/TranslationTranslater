@@ -356,8 +356,8 @@ public class MainActivity extends AppCompatActivity {
       float rate = org_height * org_width / MAX_widthMulHeight;
       Log.d(tag, "orginal width : " + org_width + " , orginal height : " + org_height);
       Log.d(tag, "it is big iamge. resizing " + rate + " percent.");
-      result_width = (int) (org_height / rate);
-      result_height = (int) (org_width / rate);
+      result_width = (int) (org_width / rate);
+      result_height = (int) (org_height / rate);
 
       FileOutputStream fosObj;
 
