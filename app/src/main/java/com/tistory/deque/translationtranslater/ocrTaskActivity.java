@@ -41,6 +41,8 @@ public class ocrTaskActivity extends AppCompatActivity {
     Log.d(tag, "ocrTask success make");
 
     _ocrTask.setImageURI(resultImageURI);
+    _ocrTask.setTextView(textView);
+    _ocrTask.setImageView(imageView);
     textView.setText(_ocrTask.RUN());
   }
 }
