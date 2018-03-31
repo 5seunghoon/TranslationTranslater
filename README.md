@@ -1,5 +1,15 @@
-# DeveloperTranslater
+# TranslationTranslater
 
-Translater for Developer
+This translater can setting your own wordbook, and you can see translated text better than other translater.
 
-Use papago API, naver
+
+1. List of used APIs
+* PAPAGO API, naver, for translation
+* VISION API, google, for Image OCR
+
+2. Feature
+* More natural translation using wordbooks which is excluding "proper nouns".
+* Edit and share user's own wordbooks.
+* Write original text from other app using share system.
+* Share translated text faster.
+* For use ocr function, can read original text from image.
