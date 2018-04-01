@@ -1,6 +1,6 @@
 # TranslationTranslater
 
-This translater can setting your own wordbook, and you can see translated text better than other translater.
+This translater can set your own wordbook, and you can see translated text better than other translater.
 
 
 1. List of used APIs
