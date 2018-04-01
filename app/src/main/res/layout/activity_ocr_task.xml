@@ -19,5 +19,31 @@
     android:id="@+id/textView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"/>
+    android:layout_gravity="center" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <Button
+      android:id="@+id/okButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_weight="0"
+      android:onClick="okButtonClk"
+      android:text="OK"
+      android:visibility="invisible" />
+
+    <Button
+      android:id="@+id/cancleButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="CANCLE"
+      android:onClick="cancleButtonClk"
+      android:visibility="invisible" />
+  </LinearLayout>
+
 </LinearLayout>

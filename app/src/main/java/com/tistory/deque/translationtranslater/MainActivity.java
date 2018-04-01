@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
   private static final int REQUEST_TAKE_PHOTO = 101;
   private static final int REQUEST_TAKE_ALBUM = 102;
   private static final int REQUEST_IMAGE_CROP = 103;
+  private static final int REQUEST_OCR_STRING = 104;
   private static final int MULTIPLE_PERMISSIONS = 200; //권한 동의 여부 문의 후 CallBack 함수에 쓰일 변수
 
   private static final int MAX_widthMulHeight = 200000;
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
   public void startOcrTaskActivity(Uri resultImageUri){
     Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), ocrTaskActivity.class);
     ocrTaskActivityIntent.putExtra("IMAGE_URI", resultImageUri);
-    startActivity(ocrTaskActivityIntent);
+    startActivityForResult(ocrTaskActivityIntent, REQUEST_OCR_STRING);
   }
 
   /** --- **/
@@ -160,6 +161,11 @@ public class MainActivity extends AppCompatActivity {
           resizingImage();
           galleryAddPic();
           startOcrTaskActivity(cropEndURI);
+        }
+        break;
+      case REQUEST_OCR_STRING:
+        if(resultCode == Activity.RESULT_OK){
+          inputEditText.setText(data.getStringExtra("OCR_STRING"));
         }
         break;
     }
