@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,22 +44,23 @@ public class ocrTask {
    */
 
   private static final String CLOUD_VISION_API_KEY = "AIzaSyB3Ccj7Bd-QJt_zv2vS7ftc-siVgclrm3w";
-  public static final String FILE_NAME = "temp.jpg";
   private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
   private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
   private static final int MAX_LABEL_RESULTS = 10;
   private static final int MAX_DIMENSION = 1200;
 
   private Context context;
+  private Button okButton, cancleButton;
   private Uri imageUri;
   private TextView mImageDetails;
   private ImageView mMainImage;
-  private String resultOCRString = "읽는중.... 기다려주세요....";
   
   static private String tag = "ocrTaskClass";
 
-  public ocrTask(Context context) {
+  public ocrTask(Context context, Button okButton, Button cancleButton) {
     this.context = context;
+    this.okButton = okButton;
+    this.cancleButton = cancleButton;
   }
 
   public void setImageURI(Uri imageUri){
@@ -73,13 +76,13 @@ public class ocrTask {
     Log.d(tag, "image view set success");
   }
 
-  public String RUN(){
+  public void RUN(){
     Log.d(tag, "RUN OCR TASK");
-    //imageUriToBase64();
-    return VisionAPI();
+    VisionAPI();
+    return;
   }
 
-  private String VisionAPI(){
+  private void VisionAPI(){
     /**
      * 1. uri로부터 이미지 들고와서 bitmap을 만든 다음 callCloudVision() 콜 (사이즈가 크면 리사이징 먼저)
      * 2. textDetectionTask를 만들고, 그 task를 execute. (이 task는 스래드임.)
@@ -91,7 +94,7 @@ public class ocrTask {
      */
     Log.d(tag, "visionapi func");
     uploadImage(imageUri);
-    return resultOCRString;
+    return;
   }
 
   public void uploadImage(Uri uri) {
@@ -140,11 +143,18 @@ public class ocrTask {
 
   private void callCloudVision(final Bitmap bitmap) {
     // Switch text to loading
-    mImageDetails.setText(R.string.loading_message);
+    //mImageDetails.setText(R.string.loading_message);
 
     // Do the real work in an async task, because we need to use the network anyway
     try {
-      AsyncTask<Object, Void, String> textDetectionTask = new TextDetectionTask(mImageDetails, prepareAnnotationRequest(bitmap));
+      AsyncTask<Object, Void, String> textDetectionTask =
+        new TextDetectionTask(
+          mImageDetails,
+          prepareAnnotationRequest(bitmap),
+          okButton,
+          cancleButton
+        );
+
       textDetectionTask.execute();
     } catch (IOException e) {
       Log.d(tag, "failed to make API request because of other IOException " +
@@ -236,9 +246,12 @@ public class ocrTask {
   private static class TextDetectionTask extends AsyncTask<Object, Void, String> {
     private TextView mImageDetails;
     private Vision.Images.Annotate mRequest;
+    private Button okButton, cancleButton;
 
-    TextDetectionTask(TextView mImageDetails, Vision.Images.Annotate annotate) {
+    TextDetectionTask(TextView mImageDetails, Vision.Images.Annotate annotate, Button okButton, Button cancleButton) {
       this.mImageDetails = mImageDetails;
+      this.okButton = okButton;
+      this.cancleButton = cancleButton;
       mRequest = annotate;
     }
 
@@ -261,11 +274,13 @@ public class ocrTask {
     protected void onPostExecute(String result) {
       Log.d(tag, "GET message from google : " +  result);
       mImageDetails.setText(result);
+      okButton.setVisibility(View.VISIBLE);
+      cancleButton.setVisibility(View.VISIBLE);
     }
   }
 
   private static String convertResponseToString(BatchAnnotateImagesResponse response) {
-    StringBuilder message = new StringBuilder("리딩 결과........ \n\n");
+    StringBuilder message = new StringBuilder("");
 
     List<EntityAnnotation> labels = response.getResponses().get(0).getTextAnnotations();
     if (labels != null) {
