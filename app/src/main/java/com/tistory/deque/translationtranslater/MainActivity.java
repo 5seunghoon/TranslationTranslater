@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -40,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
   private static final int MAX_widthMulHeight = 200000;
 
+  private int dbVersion = 1;
+  protected dbOpenHelper dbHelper;
+  protected SQLiteDatabase db;
+
   private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
   Uri imageUri, cropSoureURI, cropEndURI;
@@ -61,16 +66,30 @@ public class MainActivity extends AppCompatActivity {
     inputEditText = findViewById(R.id.inputEditText);
     translateButton = findViewById(R.id.translateButton);
     translateTextView = findViewById(R.id.translateTextView);
-
     imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
     checkPermissions();
+    dbOpen();
 
     Intent onIntent = getIntent();
     sharedToMe(onIntent);
 
     inputEditText.clearFocus(); //when create activity, we must hide keyboard
+
+
+    dbTest();
   }
+
+  private void dbTest() {
+    dbHelper.insertWord(db, "PYTHON", "파이썬");
+    dbHelper.insertWord(db, "AJAX", "에이젝스");
+  }
+
+  private void dbOpen() {
+    dbHelper = dbOpenHelper.getDbOpenHelper(getApplicationContext(), dbOpenHelper.TABLE_NAME, null, dbVersion);
+    db = dbHelper.getWritableDatabase();
+  }
+
 
 
   public void sharedToMe(Intent intent){
