@@ -11,10 +11,11 @@ import android.util.Log;
  */
 
 public class dbOpenHelper extends SQLiteOpenHelper{
-  private static dbOpenHelper helper;
+  private static dbOpenHelper dbHelper;
+  protected SQLiteDatabase db;
 
   private static final String tag = "dbOpenHelper";
-  public static final String TABLE_NAME = "wordbook";
+  public static final String TABLE_NAME = "WORDBOOK";
   
   public static final String ORIGINAL_WORD_KEY = "ORIGINAL_WORD";
   public static final String TRANSLATED_WORD_KEY = "TRANSLATED_WORD";
@@ -24,11 +25,25 @@ public class dbOpenHelper extends SQLiteOpenHelper{
   }
 
   public static dbOpenHelper getDbOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
-    if(helper != null) return helper;
-    else{
-      helper = new dbOpenHelper(context, name, factory, version);
-      return helper;
+    if(dbHelper != null) {
+      Log.d(tag, "call singletun : helper not null");
+      return dbHelper;
     }
+    else{
+      dbHelper = new dbOpenHelper(context, name, factory, version);
+      Log.d(tag, "call singletun : helper null");
+      return dbHelper;
+    }
+  }
+
+  public void dbOpen(){
+    db = dbHelper.getWritableDatabase();
+    //dbHelper.onCreate(db);
+  }
+
+  public void dbClose(){
+    db.close();
+    Log.d(tag, "database close");
   }
 
   @Override
@@ -38,11 +53,17 @@ public class dbOpenHelper extends SQLiteOpenHelper{
 
   @Override
   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+    db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
+    onCreate(db);
   }
 
   public void createTable(SQLiteDatabase db){
-    String sql = "CREATE TABLE " + TABLE_NAME + "(name text)";
+    String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
+      ORIGINAL_WORD_KEY + " TEXT" +
+      ", " +
+      TRANSLATED_WORD_KEY + " TEXT" +
+      ")";
+    Log.d(tag, "SQL EXEC : " + sql);
     try{
       db.execSQL(sql);
       Log.d(tag, "create db : " + TABLE_NAME);
@@ -51,13 +72,11 @@ public class dbOpenHelper extends SQLiteOpenHelper{
     }
   }
 
-  public boolean insertWord(SQLiteDatabase db, String originalWord, String translatedWord){
+  public boolean insertWord(String originalWord, String translatedWord){
     ContentValues wordValue = new ContentValues();
     wordValue.put(ORIGINAL_WORD_KEY, originalWord);
     wordValue.put(TRANSLATED_WORD_KEY, translatedWord);
-    db.beginTransaction();
     long result = db.insert(TABLE_NAME, null, wordValue);
-    db.endTransaction();
     if(result == -1){
       Log.d(tag, "insert error : orig : " + originalWord + " , trans : " + translatedWord);
       return false;

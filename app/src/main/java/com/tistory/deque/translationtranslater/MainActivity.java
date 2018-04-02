@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
   private int dbVersion = 1;
   protected dbOpenHelper dbHelper;
-  protected SQLiteDatabase db;
+  //protected SQLiteDatabase db;
 
   private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
@@ -80,14 +79,22 @@ public class MainActivity extends AppCompatActivity {
     dbTest();
   }
 
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    if(dbHelper != null){
+      dbHelper.dbClose();
+    }
+  }
+
   private void dbTest() {
-    dbHelper.insertWord(db, "PYTHON", "파이썬");
-    dbHelper.insertWord(db, "AJAX", "에이젝스");
+    dbHelper.insertWord("PYTHON", "파이썬");
+    dbHelper.insertWord("AJAX", "에이젝스");
   }
 
   private void dbOpen() {
     dbHelper = dbOpenHelper.getDbOpenHelper(getApplicationContext(), dbOpenHelper.TABLE_NAME, null, dbVersion);
-    db = dbHelper.getWritableDatabase();
+    dbHelper.dbOpen();
   }
 
 
