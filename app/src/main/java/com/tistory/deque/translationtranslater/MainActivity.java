@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -76,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     inputEditText.clearFocus(); //when create activity, we must hide keyboard
 
 
-    dbTest();
+    dbInsertTest();
   }
 
   @Override
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  private void dbTest() {
+  private void dbInsertTest() {
     dbHelper.insertWord("PYTHON", "파이썬");
     dbHelper.insertWord("AJAX", "에이젝스");
   }
@@ -198,24 +196,11 @@ public class MainActivity extends AppCompatActivity {
   }
   public void clickTranslateButton(View view){
     originalString = inputEditText.getText().toString();
-    try{
-      ConnectivityManager connectivityManager =
-        (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-      NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-      if(networkInfo != null && networkInfo.isConnected()){ //check Internet connection
-        new TranslateAsyncTask(translateTextView, "en", "ko").execute(originalString);
-        imm.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0);//if click button, keyboard will hide.
+    imm.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0);//if click button, keyboard will hide.
 
-        //Android is not connect network main thread
-        //So call TranslateAsyncTask which extends AsyncTask. It execute new thread for connecting network.
-      }
-      else{
-        Toast.makeText(getApplicationContext(), "NETWORK IS NOT CONNECTED", Toast.LENGTH_LONG).show();
-      }
-    }
-    catch (Exception e){
-      Log.d(tag, e.toString());
-    }
+    excludeStringTranslate translatingClass = new excludeStringTranslate(getApplicationContext(), dbHelper, translateTextView);
+    translatingClass.setOriginalString(inputEditText.getText().toString());
+    translatingClass.translate();
   }
 
   public void clickShareButton(View view){

@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class dbOpenHelper extends SQLiteOpenHelper{
   private static dbOpenHelper dbHelper;
-  protected SQLiteDatabase db;
+  public SQLiteDatabase db;
 
   private static final String tag = "dbOpenHelper";
   public static final String TABLE_NAME = "WORDBOOK";
@@ -59,6 +59,7 @@ public class dbOpenHelper extends SQLiteOpenHelper{
 
   public void createTable(SQLiteDatabase db){
     String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
+      "_ID INTEGER PRIMARY KEY AUTOINCREMENT, "+
       ORIGINAL_WORD_KEY + " TEXT" +
       ", " +
       TRANSLATED_WORD_KEY + " TEXT" +

@@ -8,7 +8,6 @@ package com.tistory.deque.translationtranslater;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 
 import org.json.JSONObject;
 
@@ -25,19 +24,22 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
   private final String clientSecret = "Gjkp5UpH5o";
 
   private String resultString;
-  private TextView translateTextView;
+  //private TextView translateTextView;
   private String sourceLang;
   private String targetLang;
 
+  private excludeStringTranslate translatingClass;
 
-  public TranslateAsyncTask(TextView translateTextView, String sourceLang, String targetLang) {
+
+  public TranslateAsyncTask(excludeStringTranslate translatingClass, String sourceLang, String targetLang) {
     /**
      * translateTextView : TextView that translated text is display
      * sourceLang : Source string's Language
      * targetLang : Target string's Language
      */
     super();
-    this.setTranslateTextView(translateTextView);
+    //this.setTranslateTextView(translateTextView);
+    this.translatingClass = translatingClass;
     this.sourceLang = sourceLang;
     this.targetLang = targetLang;
   }
@@ -60,7 +62,7 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
   @Override
   protected void onPostExecute(String s) {
     super.onPostExecute(s);
-    getTranslateTextView().setText(getResultString());
+    translatingClass.callbackEndTranslated(getResultString());
   }
 
   private StringBuffer getHttpResponseFromPapagoAPI(String input){
@@ -142,13 +144,6 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
     this.resultString = resultString;
   }
 
-  public TextView getTranslateTextView() {
-    return translateTextView;
-  }
-
-  public void setTranslateTextView(TextView translateTextView) {
-    this.translateTextView = translateTextView;
-  }
 
   public String getClientId() {
     return clientId;
