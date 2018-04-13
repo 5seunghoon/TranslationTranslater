@@ -13,12 +13,16 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -30,6 +34,7 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+  public enum viewState {NORMAL, EXTAND};
   private static final int REQUEST_TAKE_PHOTO = 101;
   private static final int REQUEST_TAKE_ALBUM = 102;
   private static final int REQUEST_IMAGE_CROP = 103;
@@ -45,13 +50,20 @@ public class MainActivity extends AppCompatActivity {
   private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
   Uri imageUri, cropSoureURI, cropEndURI;
+  long backPressedTime;
   String mCurrentPhotoPath;
+  viewState viewstate;
+  Toast backToast;
 
   EditText inputEditText;
   Button translateButton;
   EditText translateTextView;
   String originalString;
   InputMethodManager imm;
+  LinearLayout originalTextAndButtonLayout;
+  LinearLayout moreButtonLayout;
+  ActionBar actionBar;
+
 
   String tag = "mainActivityTAG";
 
@@ -63,10 +75,22 @@ public class MainActivity extends AppCompatActivity {
     inputEditText = findViewById(R.id.inputEditText);
     translateButton = findViewById(R.id.translateButton);
     translateTextView = findViewById(R.id.translateTextView);
+    //translateTextView.setClickable(false);
+    translateTextView.setFocusableInTouchMode(false);
+    originalTextAndButtonLayout = findViewById(R.id.originalTextAndButtonLayout);
+    moreButtonLayout = findViewById(R.id.moreButtonLayout);
+
+    actionBar = getSupportActionBar();
+
     imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+    setTitle(R.string.app_name);
 
     checkPermissions();
     dbOpen();
+
+    viewstate = viewState.NORMAL;
+    backPressedTime = 0;
 
     Intent onIntent = getIntent();
     sharedToMe(onIntent);
@@ -74,7 +98,8 @@ public class MainActivity extends AppCompatActivity {
     inputEditText.clearFocus(); //when create activity, we must hide keyboard
 
 
-    dbInsertTest();
+
+    //dbInsertTest();
   }
 
   @Override
@@ -85,16 +110,58 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  @Override
+  public void onBackPressed(){
+    if(viewstate == viewState.NORMAL){
+      if(System.currentTimeMillis() - backPressedTime < 2000){
+        backToast.cancel();
+        finish();
+      }
+      else{
+        backPressedTime = System.currentTimeMillis();
+        backToast = Toast.makeText(getApplicationContext(), "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_LONG);
+        backToast.show();
+      }
+    }
+    if(viewstate == viewState.EXTAND){
+      doExtandStateToNormalState();
+    }
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.actionbar_actions, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
   private void dbInsertTest() {
     dbHelper.insertWord("PYTHON", "파이썬");
     dbHelper.insertWord("AJAX", "에이젝스");
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()){
+      case R.id.action_camera:
+        doCamera();
+        break;
+      case R.id.action_gallery:
+        doGallery();
+        break;
+      case R.id.action_history:
+        doHistory();
+        break;
+      case R.id.action_wordbook:
+        doWordbook();
+        break;
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   private void dbOpen() {
     dbHelper = dbOpenHelper.getDbOpenHelper(getApplicationContext(), dbOpenHelper.TABLE_NAME, null, dbVersion);
     dbHelper.dbOpen();
   }
-
 
 
   public void sharedToMe(Intent intent){
@@ -115,6 +182,38 @@ public class MainActivity extends AppCompatActivity {
     Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), ocrTaskActivity.class);
     ocrTaskActivityIntent.putExtra("IMAGE_URI", resultImageUri);
     startActivityForResult(ocrTaskActivityIntent, REQUEST_OCR_STRING);
+  }
+
+  public void clickFloatingActionButton(View view){
+    if(viewstate == viewState.NORMAL){
+      doNormalStateToExtandState();
+    }
+    else if(viewstate == viewState.EXTAND){
+      doExtandStateToNormalState();
+    }
+  }
+  public void doNormalStateToExtandState(){
+    viewstate = viewState.EXTAND;
+    originalTextAndButtonLayout.setVisibility(View.GONE);
+    moreButtonLayout.setVisibility(View.VISIBLE);
+    translateTextView.setClickable(true);
+    translateTextView.setFocusableInTouchMode(true);
+    translateTextView.requestFocus();
+  }
+  public void doExtandStateToNormalState(){
+    viewstate = viewState.NORMAL;
+    originalTextAndButtonLayout.setVisibility(View.VISIBLE);
+    moreButtonLayout.setVisibility(View.GONE);
+    translateTextView.setClickable(false);
+    translateTextView.setFocusableInTouchMode(false);
+    translateTextView.clearFocus();
+  }
+
+  public void doHistory(){
+    return;
+  }
+  public void doWordbook(){
+    return;
   }
 
   /** --- **/
@@ -196,14 +295,25 @@ public class MainActivity extends AppCompatActivity {
   }
   public void clickTranslateButton(View view){
     originalString = inputEditText.getText().toString();
+    if(originalString.isEmpty()) return;
     imm.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0);//if click button, keyboard will hide.
 
     excludeStringTranslate translatingClass = new excludeStringTranslate(getApplicationContext(), dbHelper, translateTextView);
     translatingClass.setOriginalString(inputEditText.getText().toString());
     translatingClass.translate();
   }
+  public void clickResetButton(View view){
+    doReset();
+  }
+  public void doReset(){
+    return;
+  }
 
   public void clickShareButton(View view){
+    doShare();
+  }
+
+  public void doShare(){
     /**
      * if click share button and share to kakaotalk, it will send <<Translated Text>> massage.
      */
@@ -217,6 +327,9 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void clickCameraButton(View view) {
+    doCamera();
+  }
+  public void doCamera(){
     if(checkPermissions()){
       Log.d(tag, "check permission end");
       captureCamera();
@@ -228,6 +341,10 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void clickGalleryButton(View view){
+    doGallery();
+  }
+
+  public void doGallery(){
     if(checkPermissions()){
       Log.d(tag, "check permission end");
       getAlbum();

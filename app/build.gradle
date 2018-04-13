@@ -32,4 +32,6 @@ dependencies {
     compile 'com.google.api-client:google-api-client-android:1.23.0' exclude module: 'httpclient'
     compile 'com.google.http-client:google-http-client-gson:1.23.0' exclude module: 'httpclient'
     compile 'com.google.apis:google-api-services-vision:v1-rev369-1.23.0'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
 }

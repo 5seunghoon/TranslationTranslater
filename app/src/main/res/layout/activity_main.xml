@@ -1,82 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="@android:color/white"
   android:orientation="vertical"
   tools:context="com.tistory.deque.translationtranslater.MainActivity">
 
   <LinearLayout
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="20dp"
-    android:layout_marginVertical="20dp"
-    android:layout_weight="1"
+    android:background="#EEEEEE"
     android:orientation="vertical">
 
-    <TextView
-      android:id="@+id/guideInputText"
+    <LinearLayout
+      android:id="@+id/originalTextAndButtonLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_weight="0"
-      android:text="@string/guideInputText"
-      android:textSize="18sp" />
+      android:layout_weight="9"
+      android:background="#EEEEEE"
+      android:orientation="vertical"
+      android:paddingBottom="8dp">
 
-    <EditText
-      android:id="@+id/inputEditText"
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <EditText
+          android:id="@+id/inputEditText"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:background="@android:color/white"
+          android:ems="10"
+          android:hint="@string/guideInputText"
+          android:inputType="textMultiLine"
+          android:maxHeight="180dp"
+          android:padding="16dp"
+          android:textAllCaps="false"
+          android:textColor="@android:color/black"
+          android:textColorHint="@android:color/darker_gray"
+          android:textColorLink="@android:color/black" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@android:color/white"
+          android:gravity="right"
+          android:orientation="horizontal"
+          android:padding="8dp">
+
+          <Space
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+          <Button
+            android:id="@+id/translateButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="96dp"
+            android:layout_height="56dp"
+            android:gravity="center"
+            android:onClick="clickTranslateButton"
+            android:text="@string/translateButton_text"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:visibility="visible" />
+        </LinearLayout>
+
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/translatedTextLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_weight="6"
-      android:ems="10"
-      android:inputType="textMultiLine"
-      android:textAllCaps="false" />
+      android:layout_weight="12"
+      android:background="@android:color/white"
+      android:orientation="vertical">
 
-    <Button
-      android:id="@+id/translateButton"
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#EEEEEE"
+        android:orientation="vertical">
+
+        <EditText
+          android:id="@+id/translateTextView"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:background="@android:color/white"
+          android:hint="@string/translateTextView_text"
+          android:maxHeight="180dp"
+          android:padding="16dp"
+          android:textColor="@android:color/black"
+          android:textColorHint="@android:color/darker_gray"
+          tools:clickable="false" />
+
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/moreButtonLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginHorizontal="100dp"
-      android:layout_marginVertical="30dp"
-      android:layout_weight="0"
-      android:onClick="clickTranslateButton"
-      android:text="@string/translateButton_text" />
+      android:background="@android:color/white"
+      android:gravity="center"
+      android:orientation="horizontal"
+      android:padding="16dp"
+      android:scaleX="1"
+      android:visibility="gone">
 
-    <EditText
-      android:id="@+id/translateTextView"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_weight="8"
-      android:text="@string/translateTextView_text"
-      android:textSize="18sp" />
+      <Button
+        android:id="@+id/resetButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="clickResetButton"
+        android:text="RESET" />
 
-    <Button
-      android:id="@+id/shareButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:layout_weight="0"
-      android:onClick="clickShareButton"
-      android:text="SHARE" />
+      <Space
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0" />
 
-    <Button
-      android:id="@+id/cameraButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:layout_weight="0"
-      android:onClick="clickCameraButton"
-      android:text="CAMERA" />
+      <Button
+        android:id="@+id/shareButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="clickShareButton"
+        android:text="SHARE" />
 
-    <Button
-      android:id="@+id/galleryButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:layout_weight="0"
-      android:onClick="clickGalleryButton"
-      android:text="Gallery" />
+    </LinearLayout>
 
   </LinearLayout>
 
-</LinearLayout>
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/floatingActionButton"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:clickable="true"
+    android:onClick="clickFloatingActionButton"
+    app:backgroundTint="@color/colorPrimary"
+    app:layout_anchor="@+id/mainLayout"
+    app:layout_anchorGravity="right|bottom"
+    app:srcCompat="@drawable/ic_find_replace_white_48dp" />
+
+</android.support.design.widget.CoordinatorLayout>
