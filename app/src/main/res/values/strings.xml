@@ -1,9 +1,12 @@
 <resources>
-  <string name="app_name">translation translater</string>
+  <string name="app_name">번역을 번역하다</string>
   <string name="loading_message">LOADING....</string>
   <string name="image_picker_error">IMAGE PICKER ERROR</string>
 
-  <string name="translateButton_text">Translate</string>
+  <string name="translateButton_text">번역</string>
   <string name="guideInputText">입력하세요</string>
   <string name="translateTextView_text">번역 결과</string>
+  <string name="ocrwaiting">LOADING... PLEASE WAIT....</string>
+
+  <string name="ocrTitle">이미지 문자 인식</string>
 </resources>
