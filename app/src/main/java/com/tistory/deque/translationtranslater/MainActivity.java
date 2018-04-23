@@ -34,7 +34,7 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-  public enum viewState {NORMAL, EXTAND};
+  public enum viewState { NORMAL, EXTAND }
   private static final int REQUEST_TAKE_PHOTO = 101;
   private static final int REQUEST_TAKE_ALBUM = 102;
   private static final int REQUEST_IMAGE_CROP = 103;
@@ -47,9 +47,13 @@ public class MainActivity extends AppCompatActivity {
   protected dbOpenHelper dbHelper;
   //protected SQLiteDatabase db;
 
-  private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+  private String[] permissions = {
+    Manifest.permission.READ_EXTERNAL_STORAGE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    Manifest.permission.CAMERA,
+  };
 
-  Uri imageUri, cropSoureURI, cropEndURI;
+  Uri imageUri, cropSourceURI, cropEndURI;
   long backPressedTime;
   String mCurrentPhotoPath;
   viewState viewstate;
@@ -63,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
   LinearLayout originalTextAndButtonLayout;
   LinearLayout moreButtonLayout;
   ActionBar actionBar;
-
 
   String tag = "mainActivityTAG";
 
@@ -97,33 +100,34 @@ public class MainActivity extends AppCompatActivity {
 
     inputEditText.clearFocus(); //when create activity, we must hide keyboard
 
-
-
     //dbInsertTest();
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    if(dbHelper != null){
+    if (dbHelper != null) {
       dbHelper.dbClose();
     }
   }
 
   @Override
   public void onBackPressed(){
-    if(viewstate == viewState.NORMAL){
-      if(System.currentTimeMillis() - backPressedTime < 2000){
+    if (viewstate == viewState.NORMAL) {
+      if (System.currentTimeMillis() - backPressedTime < 2000) {
         backToast.cancel();
         finish();
-      }
-      else{
+      } else {
         backPressedTime = System.currentTimeMillis();
-        backToast = Toast.makeText(getApplicationContext(), "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_LONG);
+        backToast = Toast.makeText(
+          getApplicationContext(),
+          "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.",
+          Toast.LENGTH_LONG
+        );
         backToast.show();
       }
     }
-    if(viewstate == viewState.EXTAND){
+    if (viewstate == viewState.EXTAND) {
       doExtandStateToNormalState();
     }
   }
@@ -159,12 +163,15 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void dbOpen() {
-    dbHelper = dbOpenHelper.getDbOpenHelper(getApplicationContext(), dbOpenHelper.TABLE_NAME, null, dbVersion);
+    dbHelper = dbOpenHelper.getDbOpenHelper(
+      getApplicationContext(),
+      dbOpenHelper.TABLE_NAME,
+      null, dbVersion
+    );
     dbHelper.dbOpen();
   }
 
-
-  public void sharedToMe(Intent intent){
+  public void sharedToMe(Intent intent) {
     /**
      * If user click share on other app, android will show this app.
      * And if user click this app, this app will set [original text] to [user's picked text].
@@ -178,21 +185,20 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  public void startOcrTaskActivity(Uri resultImageUri){
+  public void startOcrTaskActivity(Uri resultImageUri) {
     Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), ocrTaskActivity.class);
     ocrTaskActivityIntent.putExtra("IMAGE_URI", resultImageUri);
     startActivityForResult(ocrTaskActivityIntent, REQUEST_OCR_STRING);
   }
 
-  public void clickFloatingActionButton(View view){
+  public void clickFloatingActionButton(View view) {
     if(viewstate == viewState.NORMAL){
       doNormalStateToExtandState();
-    }
-    else if(viewstate == viewState.EXTAND){
+    } else if(viewstate == viewState.EXTAND) {
       doExtandStateToNormalState();
     }
   }
-  public void doNormalStateToExtandState(){
+  public void doNormalStateToExtandState() {
     viewstate = viewState.EXTAND;
     originalTextAndButtonLayout.setVisibility(View.GONE);
     moreButtonLayout.setVisibility(View.VISIBLE);
@@ -200,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     translateTextView.setFocusableInTouchMode(true);
     translateTextView.requestFocus();
   }
-  public void doExtandStateToNormalState(){
+  public void doExtandStateToNormalState() {
     viewstate = viewState.NORMAL;
     originalTextAndButtonLayout.setVisibility(View.VISIBLE);
     moreButtonLayout.setVisibility(View.GONE);
@@ -209,15 +215,12 @@ public class MainActivity extends AppCompatActivity {
     translateTextView.clearFocus();
   }
 
-  public void doHistory(){
+  public void doHistory() {
     return;
   }
-  public void doWordbook(){
+  public void doWordbook() {
     return;
   }
-
-  /** --- **/
-
 
   /**
    * 카메라 버튼을 클릭했을 때,
@@ -243,34 +246,33 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    switch (requestCode){
+    switch (requestCode) {
       case REQUEST_TAKE_PHOTO:
-        if(resultCode == Activity.RESULT_OK){
+        if(resultCode == Activity.RESULT_OK) {
           try{
             Log.d(tag, "REQUEST TAKE PHOTO OK");
             File albumFile = null;
             albumFile = createImageFile();
             //cropImage(): cropSoureURI 위치의 파일을 잘라서 cropEndURI로 저장
             //따라서 imageURI에 담겨있는 파일위치를 자를 것이기 때문에 cropSoureURI imageURI를 저장해야 함
-            cropSoureURI = imageUri;
+            cropSourceURI = imageUri;
             cropEndURI = Uri.fromFile(albumFile);
             cropImage();
-          } catch (Exception e){
+          } catch (Exception e) {
             Log.e(tag, "REQUEST TAKE PHOTO" + e.toString());
           }
-        }
-        else{
+        } else {
           Toast.makeText(this, "사진찍기를 취소하였습니다.", Toast.LENGTH_LONG).show();
         }
         break;
 
       case REQUEST_TAKE_ALBUM:
-        if(resultCode == Activity.RESULT_OK){
-          if(data.getData() != null){
+        if(resultCode == Activity.RESULT_OK) {
+          if(data.getData() != null) {
             try{
               File albumFile = null;
               albumFile = createImageFile();
-              cropSoureURI = data.getData();
+              cropSourceURI = data.getData();
               cropEndURI = Uri.fromFile(albumFile);
               cropImage();
             } catch (Exception e){
@@ -280,40 +282,42 @@ public class MainActivity extends AppCompatActivity {
         }
         break;
       case REQUEST_IMAGE_CROP:
-        if(resultCode == Activity.RESULT_OK){
+        if(resultCode == Activity.RESULT_OK) {
           resizingImage();
           galleryAddPic();
           startOcrTaskActivity(cropEndURI);
         }
         break;
       case REQUEST_OCR_STRING:
-        if(resultCode == Activity.RESULT_OK){
+        if(resultCode == Activity.RESULT_OK) {
           inputEditText.setText(data.getStringExtra("OCR_STRING"));
         }
         break;
+      // TODO need add "default" case
     }
   }
-  public void clickTranslateButton(View view){
+  public void clickTranslateButton(View view) {
     originalString = inputEditText.getText().toString();
-    if(originalString.isEmpty()) return;
+    if (originalString.isEmpty()) return;
     imm.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0);//if click button, keyboard will hide.
 
-    excludeStringTranslate translatingClass = new excludeStringTranslate(getApplicationContext(), dbHelper, translateTextView);
+    excludeStringTranslate translatingClass =
+      new excludeStringTranslate(getApplicationContext(), dbHelper, translateTextView);
     translatingClass.setOriginalString(inputEditText.getText().toString());
     translatingClass.translate();
   }
-  public void clickResetButton(View view){
+  public void clickResetButton(View view) {
     doReset();
   }
-  public void doReset(){
+  public void doReset() {
     return;
   }
 
-  public void clickShareButton(View view){
+  public void clickShareButton(View view) {
     doShare();
   }
 
-  public void doShare(){
+  public void doShare() {
     /**
      * if click share button and share to kakaotalk, it will send <<Translated Text>> massage.
      */
@@ -329,46 +333,44 @@ public class MainActivity extends AppCompatActivity {
   public void clickCameraButton(View view) {
     doCamera();
   }
-  public void doCamera(){
+  public void doCamera() {
     if(checkPermissions()){
       Log.d(tag, "check permission end");
       captureCamera();
       Log.d(tag, "capture camera func end");
     }
-    else{
-      return;
-    }
+
+    return;
   }
 
-  public void clickGalleryButton(View view){
+  public void clickGalleryButton(View view) {
     doGallery();
   }
 
-  public void doGallery(){
+  public void doGallery() {
     if(checkPermissions()){
       Log.d(tag, "check permission end");
       getAlbum();
       Log.d(tag, "get album func end");
     }
-    else{
-      return;
-    }
+
+    return;
   }
-  private void captureCamera(){
+  private void captureCamera() {
     String state = Environment.getExternalStorageState();
-    if(Environment.MEDIA_MOUNTED.equals(state)){
+    if(Environment.MEDIA_MOUNTED.equals(state)) {
       Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
       Log.d(tag, "intent takePictureIntent init");
 
-      if(takePictureIntent.resolveActivity(getPackageManager()) != null){
+      if(takePictureIntent.resolveActivity(getPackageManager()) != null) {
         Log.d(tag, "if takePictureIntent.resolveActivity(getPackageManager()) != null");
         File photoFile = null;
-        try{
+        try {
           photoFile = createImageFile();
         } catch (IOException ex){
           Log.e(tag, "captureCamera Error" + ex.toString());
         }
-        if(photoFile != null){
+        if (photoFile != null) {
           Log.d(tag, "photo file make success");
           //make photo file success
           Uri providerURI = FileProvider.getUriForFile(this, "com.tistory.deque.translationtranslater", photoFile);
@@ -379,8 +381,7 @@ public class MainActivity extends AppCompatActivity {
           Log.d(tag, "start activity : takepictureintent");
           startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
         }
-      }
-      else{
+      } else {
         Toast.makeText(this, "저장공간이 접근 불가능한 기기입니다.", Toast.LENGTH_LONG).show();
       }
     }
@@ -406,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
 
-  private void getAlbum(){
+  private void getAlbum() {
     Log.d(tag, "getAlbum()");
     Intent intent = new Intent(Intent.ACTION_PICK);
     intent.setType("image/*");
@@ -415,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
     startActivityForResult(intent, REQUEST_TAKE_ALBUM);
   }
 
-  private void galleryAddPic(){
+  private void galleryAddPic() {
     Log.d(tag, "galleryAddPic, do media scan");
     Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
     File f = new File(mCurrentPhotoPath);
@@ -424,34 +425,35 @@ public class MainActivity extends AppCompatActivity {
     sendBroadcast(mediaScanIntent);
     Log.d(tag, "media scanning end");
   }
-  public void cropImage(){
+
+  public void cropImage() {
     /**
-     * cropSoureURI = 자를 uri
+     * cropSourceURI = 자를 uri
      * cropEndURI = 자르고 난뒤 uri
      */
     Log.d(tag, "cropImage() CALL");
-    Log.d(tag, "cropImage() : Photo URI, Album URI" + cropSoureURI + ", " + cropEndURI);
+    Log.d(tag, "cropImage() : Photo URI, Album URI" + cropSourceURI + ", " + cropEndURI);
 
     Intent cropIntent = new Intent("com.android.camera.action.CROP");
 
     cropIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
     cropIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-    cropIntent.setDataAndType(cropSoureURI, "image/*");
+    cropIntent.setDataAndType(cropSourceURI, "image/*");
     //cropIntent.putExtra("aspectX", 1);
     //cropIntent.putExtra("aspectY", 1);
     //cropIntent.putExtra("scale", true);
     cropIntent.putExtra("output", cropEndURI);
     startActivityForResult(cropIntent, REQUEST_IMAGE_CROP);
   }
-  public void resizingImage(){
+
+  public void resizingImage() {
     Log.d(tag, "call resizing image");
     int org_width, org_height;
     int result_width, result_height;
 
-
     Bitmap srcBmp;
     //srcBmp = BitmapFactory.decodeFile(cropEndURI.getPath());
-    try{
+    try {
       srcBmp = MediaStore.Images.Media.getBitmap(getContentResolver(), cropEndURI);
     } catch (Exception e){
       Log.d(tag, "bitmap load exception : " + e.toString());
@@ -461,7 +463,7 @@ public class MainActivity extends AppCompatActivity {
     org_width = srcBmp.getWidth();
     org_height = srcBmp.getHeight();
 
-    if(MAX_widthMulHeight < org_height * org_width){
+    if (MAX_widthMulHeight < org_height * org_width) {
       double rate = Math.sqrt((org_height * org_width) / MAX_widthMulHeight);
       Log.d(tag, "orginal width : " + org_width + " , orginal height : " + org_height);
       Log.d(tag, "it is big iamge. resizing " + rate + " percent.");
@@ -480,13 +482,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(tag, "rewrite");
         fosObj.flush();
         fosObj.close();
-      } catch (Exception e){
+      } catch (Exception e) {
         Log.d(tag, "file write exception : " + e.toString());
       }
     }
   }
-
-
   /** 이하 권한 **/
 
   @Override
@@ -539,5 +539,4 @@ public class MainActivity extends AppCompatActivity {
     }
     return true;
   }
-
 }
