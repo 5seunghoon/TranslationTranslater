@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   @Override
-  public void onBackPressed(){
+  public void onBackPressed() {
     if (viewstate == viewState.NORMAL) {
       if (System.currentTimeMillis() - backPressedTime < 2000) {
         backToast.cancel();
