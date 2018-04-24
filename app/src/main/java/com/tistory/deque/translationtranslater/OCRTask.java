@@ -36,9 +36,9 @@ import java.util.List;
  * Created by HELLOEARTH on 2018-03-27.
  */
 
-public class ocrTask {
+public class OCRTask {
   /**
-   * 1. make ocrTask Class by context
+   * 1. make OCRTask Class by context
    * 2. set Image URI, textView, imageView
    * 3. call RUN()
    */
@@ -51,20 +51,20 @@ public class ocrTask {
 
   private Context context;
   private Button okButton, cancleButton;
-  private Uri imageUri;
+  private Uri mImageURI;
   private TextView mImageDetails;
   private ImageView mMainImage;
   
   static private String tag = "ocrTaskClass";
 
-  public ocrTask(Context context, Button okButton, Button cancleButton) {
+  public OCRTask(Context context, Button okButton, Button cancleButton) {
     this.context = context;
     this.okButton = okButton;
     this.cancleButton = cancleButton;
   }
 
-  public void setImageURI(Uri imageUri){
-    this.imageUri = imageUri;
+  public void setmImageURI(Uri imageUri){
+    this.mImageURI = imageUri;
     Log.d(tag, "image uri set success");
   }
   public void setTextView(TextView textView){
@@ -93,7 +93,7 @@ public class ocrTask {
      * 5. onPostExecute에서 미리 세팅된 textView의 text로 setting됨.
      */
     Log.d(tag, "visionapi func");
-    uploadImage(imageUri);
+    uploadImage(mImageURI);
     return;
   }
 

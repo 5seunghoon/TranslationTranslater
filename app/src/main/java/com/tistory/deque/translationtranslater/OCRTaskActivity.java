@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ocrTaskActivity extends AppCompatActivity {
+public class OCRTaskActivity extends AppCompatActivity {
 
   private ImageView imageView;
   private TextView textView;
@@ -21,14 +21,14 @@ public class ocrTaskActivity extends AppCompatActivity {
   private long backPressedTime;
   private String loadingText = "";
 
-  private Uri resultImageURI;
-  private static String tag = "ocrTaskActivityTAG";
+  private Uri resultImageUri;
+  private static String TAG = "ocrTaskActivityTAG";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ocr_task);
-    Log.d(tag, "start Activity");
+    Log.d(TAG, "start Activity");
 
     imageView = findViewById(R.id.imageView);
     textView = findViewById(R.id.editText);
@@ -55,19 +55,19 @@ public class ocrTaskActivity extends AppCompatActivity {
   }
   private void ocr(){
     textView.setText(loadingText);
-    Log.d(tag, "getBase64Encoded func");
+    Log.d(TAG, "getBase64Encoded func");
     Intent intent = getIntent();
-    resultImageURI = (Uri) intent.getExtras().get("IMAGE_URI");
-    Log.d(tag, "image uri : " + resultImageURI);
-    imageView.setImageURI(resultImageURI);
+    resultImageUri = (Uri) intent.getExtras().get("IMAGE_URI");
+    Log.d(TAG, "image uri : " + resultImageUri);
+    imageView.setImageURI(resultImageUri);
 
-    ocrTask _ocrTask = new ocrTask(getApplicationContext(), okButton, cancleButton);
-    Log.d(tag, "ocrTask success make");
+    OCRTask _OCRTask = new OCRTask(getApplicationContext(), okButton, cancleButton);
+    Log.d(TAG, "OCRTask success make");
 
-    _ocrTask.setImageURI(resultImageURI);
-    _ocrTask.setTextView(textView);
-    _ocrTask.setImageView(imageView);
-    _ocrTask.RUN();
+    _OCRTask.setmImageURI(resultImageUri);
+    _OCRTask.setTextView(textView);
+    _OCRTask.setImageView(imageView);
+    _OCRTask.RUN();
   }
   public void okButtonClk(View view){
     Intent resultIntent = new Intent();
