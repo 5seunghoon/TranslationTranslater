@@ -30,7 +30,6 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
 
   private excludeStringTranslate translatingClass;
 
-
   public TranslateAsyncTask(excludeStringTranslate translatingClass, String sourceLang, String targetLang) {
     /**
      * translateTextView : TextView that translated text is display
@@ -51,8 +50,7 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
       String translatedText = jsonToText(new JSONObject(response.toString()));
       setResultString(translatedText);
       Log.d(TAG, "Translate success");
-    }
-    catch(Exception e){
+    } catch(Exception e){
       Log.d(TAG, "Translate error");
       setResultString("Translate Error");
     }
@@ -65,13 +63,13 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
     translatingClass.callbackEndTranslated(getResultString());
   }
 
-  private StringBuffer getHttpResponseFromPapagoAPI(String input){
+  private StringBuffer getHttpResponseFromPapagoAPI(String input) {
     /**
      * Post Http request to NAVER, and get Http response from Naver by String Buffer(JSON's fromat).
      * Additional, if response code is 200, it means 'success', if other, it means 'fail'.
      */
     StringBuffer response = new StringBuffer();
-    try{
+    try {
       String text = URLEncoder.encode(input, "UTF-8");
       Log.d(TAG, "Encoded text : " + text);
       String apiURL = "https://openapi.naver.com/v1/papago/n2mt";
@@ -96,7 +94,7 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
       Log.d(TAG, "Data Output Stream close");
       int responseCode = con.getResponseCode();
       BufferedReader br;
-      if(responseCode==200) { // 정상 호출
+      if (responseCode==200) { // 정상 호출
         br = new BufferedReader(new InputStreamReader(con.getInputStream()));
         Log.d(TAG, "response code : 200, success");
       } else {  // 에러 발생
@@ -119,18 +117,17 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
     return response;
   }
 
-  private String jsonToText(JSONObject jsonObject){
+  private String jsonToText(JSONObject jsonObject) {
     /**
      * Input json object to text we wanted.
      */
     String result;
-    try{
+    try {
       result = jsonObject.getJSONObject("message").getJSONObject("result").getString("translatedText");
 
       Log.d(TAG, "Json response translated text : " + result);
       Log.d(TAG, "JSON success");
-    }
-    catch (Exception e){
+    } catch (Exception e) {
       result = "JSON ERROR";
     }
     return result;
@@ -143,7 +140,6 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
   public void setResultString(String resultString) {
     this.resultString = resultString;
   }
-
 
   public String getClientId() {
     return clientId;
