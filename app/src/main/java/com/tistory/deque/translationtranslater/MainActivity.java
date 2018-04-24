@@ -41,10 +41,10 @@ public class MainActivity extends AppCompatActivity {
   private static final int REQUEST_OCR_STRING = 104;
   private static final int MULTIPLE_PERMISSIONS = 200; //권한 동의 여부 문의 후 CallBack 함수에 쓰일 변수
 
-  private static final int MAX_widthMulHeight = 200000;
+  private static final int MAX_IMAGE_SIZE = 200000; // width * hieght
 
   private int dbVersion = 1;
-  protected dbOpenHelper dbHelper;
+  protected DBOpenHelper dbHelper;
   //protected SQLiteDatabase db;
 
   private String[] permissions = {
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     Manifest.permission.CAMERA,
   };
 
-  Uri imageUri, cropSourceURI, cropEndURI;
+  Uri imageURI, cropSourceURI, cropEndURI;
   long backPressedTime;
   String mCurrentPhotoPath;
   viewState viewstate;
@@ -163,9 +163,9 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void dbOpen() {
-    dbHelper = dbOpenHelper.getDbOpenHelper(
+    dbHelper = DBOpenHelper.getDbOpenHelper(
       getApplicationContext(),
-      dbOpenHelper.TABLE_NAME,
+      DBOpenHelper.TABLE_NAME,
       null, dbVersion
     );
     dbHelper.dbOpen();
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void startOcrTaskActivity(Uri resultImageUri) {
-    Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), ocrTaskActivity.class);
+    Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), OCRTaskActivity.class);
     ocrTaskActivityIntent.putExtra("IMAGE_URI", resultImageUri);
     startActivityForResult(ocrTaskActivityIntent, REQUEST_OCR_STRING);
   }
@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
             albumFile = createImageFile();
             //cropImage(): cropSoureURI 위치의 파일을 잘라서 cropEndURI로 저장
             //따라서 imageURI에 담겨있는 파일위치를 자를 것이기 때문에 cropSoureURI imageURI를 저장해야 함
-            cropSourceURI = imageUri;
+            cropSourceURI = imageURI;
             cropEndURI = Uri.fromFile(albumFile);
             cropImage();
           } catch (Exception e) {
@@ -301,8 +301,8 @@ public class MainActivity extends AppCompatActivity {
     if (originalString.isEmpty()) return;
     imm.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0);//if click button, keyboard will hide.
 
-    excludeStringTranslate translatingClass =
-      new excludeStringTranslate(getApplicationContext(), dbHelper, translateTextView);
+    ExcludeStringTranslate translatingClass =
+      new ExcludeStringTranslate(getApplicationContext(), dbHelper, translateTextView);
     translatingClass.setOriginalString(inputEditText.getText().toString());
     translatingClass.translate();
   }
@@ -375,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
           //make photo file success
           Uri providerURI = FileProvider.getUriForFile(this, "com.tistory.deque.translationtranslater", photoFile);
           Log.d(tag, "providerURI : " + providerURI);
-          imageUri = providerURI;
+          imageURI = providerURI;
           takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerURI);
           Log.d(tag, "intent put extra (providerURI) success : " + providerURI);
           Log.d(tag, "start activity : takepictureintent");
@@ -463,8 +463,8 @@ public class MainActivity extends AppCompatActivity {
     org_width = srcBmp.getWidth();
     org_height = srcBmp.getHeight();
 
-    if (MAX_widthMulHeight < org_height * org_width) {
-      double rate = Math.sqrt((org_height * org_width) / MAX_widthMulHeight);
+    if (MAX_IMAGE_SIZE < org_height * org_width) {
+      double rate = Math.sqrt((org_height * org_width) / MAX_IMAGE_SIZE);
       Log.d(tag, "orginal width : " + org_width + " , orginal height : " + org_height);
       Log.d(tag, "it is big iamge. resizing " + rate + " percent.");
       result_width = (int) (org_width / rate);

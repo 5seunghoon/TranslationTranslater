@@ -10,27 +10,27 @@ import android.util.Log;
  * Created by HELLOEARTH on 2018-04-02.
  */
 
-public class dbOpenHelper extends SQLiteOpenHelper{
-  private static dbOpenHelper dbHelper;
+public class DBOpenHelper extends SQLiteOpenHelper{
+  private static DBOpenHelper dbHelper;
   public SQLiteDatabase db;
 
-  private static final String tag = "dbOpenHelper";
+  private static final String tag = "DBOpenHelper";
   public static final String TABLE_NAME = "WORDBOOK";
   
   public static final String ORIGINAL_WORD_KEY = "ORIGINAL_WORD";
   public static final String TRANSLATED_WORD_KEY = "TRANSLATED_WORD";
 
-  private dbOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+  private DBOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
     super(context, name, factory, version);
   }
 
-  public static dbOpenHelper getDbOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
+  public static DBOpenHelper getDbOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
     if(dbHelper != null) {
       Log.d(tag, "call singletun : helper not null");
       return dbHelper;
     }
     else{
-      dbHelper = new dbOpenHelper(context, name, factory, version);
+      dbHelper = new DBOpenHelper(context, name, factory, version);
       Log.d(tag, "call singletun : helper null");
       return dbHelper;
     }

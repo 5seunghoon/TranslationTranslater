@@ -36,9 +36,9 @@ import java.util.List;
  * Created by HELLOEARTH on 2018-03-27.
  */
 
-public class ocrTask {
+public class OCRTask {
   /**
-   * 1. make ocrTask Class by context
+   * 1. make OCRTask Class by context
    * 2. set Image URI, textView, imageView
    * 3. call RUN()
    */
@@ -57,7 +57,7 @@ public class ocrTask {
   
   static private String tag = "ocrTaskClass";
 
-  public ocrTask(Context context, Button okButton, Button cancleButton) {
+  public OCRTask(Context context, Button okButton, Button cancleButton) {
     this.context = context;
     this.okButton = okButton;
     this.cancleButton = cancleButton;

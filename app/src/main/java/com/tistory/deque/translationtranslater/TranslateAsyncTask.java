@@ -28,9 +28,9 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
   private String sourceLang;
   private String targetLang;
 
-  private excludeStringTranslate translatingClass;
+  private ExcludeStringTranslate translatingClass;
 
-  public TranslateAsyncTask(excludeStringTranslate translatingClass, String sourceLang, String targetLang) {
+  public TranslateAsyncTask(ExcludeStringTranslate translatingClass, String sourceLang, String targetLang) {
     /**
      * translateTextView : TextView that translated text is display
      * sourceLang : Source string's Language

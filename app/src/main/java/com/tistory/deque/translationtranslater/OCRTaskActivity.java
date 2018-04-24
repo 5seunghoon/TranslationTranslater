@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ocrTaskActivity extends AppCompatActivity {
+public class OCRTaskActivity extends AppCompatActivity {
 
   private ImageView imageView;
   private TextView textView;
@@ -61,13 +61,13 @@ public class ocrTaskActivity extends AppCompatActivity {
     Log.d(tag, "image uri : " + resultImageURI);
     imageView.setImageURI(resultImageURI);
 
-    ocrTask _ocrTask = new ocrTask(getApplicationContext(), okButton, cancleButton);
-    Log.d(tag, "ocrTask success make");
+    OCRTask _OCRTask = new OCRTask(getApplicationContext(), okButton, cancleButton);
+    Log.d(tag, "OCRTask success make");
 
-    _ocrTask.setImageURI(resultImageURI);
-    _ocrTask.setTextView(textView);
-    _ocrTask.setImageView(imageView);
-    _ocrTask.RUN();
+    _OCRTask.setImageURI(resultImageURI);
+    _OCRTask.setTextView(textView);
+    _OCRTask.setImageView(imageView);
+    _OCRTask.RUN();
   }
   public void okButtonClk(View view){
     Intent resultIntent = new Intent();

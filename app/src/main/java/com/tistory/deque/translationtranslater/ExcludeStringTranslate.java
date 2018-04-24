@@ -13,12 +13,12 @@ import java.util.ArrayList;
 /**
  * Created by HELLOEARTH on 2018-04-03.
  */
-class excludingMember {
+class ExcludingMember {
   private String key;
   private String origin;
   private String value;
 
-  public excludingMember(String key, String origin, String value){
+  public ExcludingMember(String key, String origin, String value){
     //ex) "0001", "PYTHON", "파이썬"
     this.key = key;
     this.origin = origin;
@@ -49,8 +49,8 @@ class excludingMember {
     this.origin = origin;
   }
 }
-public class excludeStringTranslate {
-  private dbOpenHelper dbHelper;
+public class ExcludeStringTranslate {
+  private DBOpenHelper dbHelper;
   private Context context;
   private TextView translatedTextView;
   private String originalText;
@@ -58,7 +58,7 @@ public class excludeStringTranslate {
 
   private final static String PREDIX = "1234";
 
-  private ArrayList<excludingMember> excludingTable;
+  private ArrayList<ExcludingMember> excludingTable;
   private int tableIndex;
 
 
@@ -67,11 +67,11 @@ public class excludeStringTranslate {
 
   private String tag = "stringExclusionTranslateClass";
 
-  public excludeStringTranslate(Context context, dbOpenHelper dbHelpler, TextView translatedTextView){
+  public ExcludeStringTranslate(Context context, DBOpenHelper dbHelpler, TextView translatedTextView){
     this.context = context;
     this.dbHelper = dbHelpler;
     this.translatedTextView = translatedTextView;
-    excludingTable = new ArrayList<excludingMember>();
+    excludingTable = new ArrayList<ExcludingMember>();
   }
 
   public void setOriginalString(String originalText){
@@ -116,7 +116,7 @@ public class excludeStringTranslate {
 
       //if origianalText has match text with origin of database, replace that...
       originalText = originalText.replaceAll("(?i)" + origin, intTo4digitString(tableIndex));
-      excludingTable.add(new excludingMember(intTo4digitString(tableIndex), origin, value));
+      excludingTable.add(new ExcludingMember(intTo4digitString(tableIndex), origin, value));
       Log.d(tag, "KEY : " + intTo4digitString(tableIndex) + ", ORIGIN : " + origin + ", VALUE : " + value);
       Log.d(tag, "ORIGINAL TEXT : " + originalText);
       tableIndex++;
