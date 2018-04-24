@@ -51,7 +51,7 @@ public class OCRTask {
 
   private Context context;
   private Button okButton, cancleButton;
-  private Uri imageUri;
+  private Uri mImageURI;
   private TextView mImageDetails;
   private ImageView mMainImage;
   
@@ -63,8 +63,8 @@ public class OCRTask {
     this.cancleButton = cancleButton;
   }
 
-  public void setImageURI(Uri imageUri){
-    this.imageUri = imageUri;
+  public void setmImageURI(Uri imageUri){
+    this.mImageURI = imageUri;
     Log.d(tag, "image uri set success");
   }
   public void setTextView(TextView textView){
@@ -93,7 +93,7 @@ public class OCRTask {
      * 5. onPostExecute에서 미리 세팅된 textView의 text로 setting됨.
      */
     Log.d(tag, "visionapi func");
-    uploadImage(imageUri);
+    uploadImage(mImageURI);
     return;
   }
 

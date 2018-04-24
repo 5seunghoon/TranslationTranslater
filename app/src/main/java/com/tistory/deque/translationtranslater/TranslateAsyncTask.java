@@ -24,7 +24,6 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
   private final String clientSecret = "Gjkp5UpH5o";
 
   private String resultString;
-  //private TextView translateTextView;
   private String sourceLang;
   private String targetLang;
 
@@ -37,7 +36,6 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
      * targetLang : Target string's Language
      */
     super();
-    //this.setTranslateTextView(translateTextView);
     this.translatingClass = translatingClass;
     this.sourceLang = sourceLang;
     this.targetLang = targetLang;

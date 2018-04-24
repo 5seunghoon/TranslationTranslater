@@ -14,7 +14,7 @@ public class DBOpenHelper extends SQLiteOpenHelper{
   private static DBOpenHelper dbHelper;
   public SQLiteDatabase db;
 
-  private static final String tag = "DBOpenHelper";
+  private static final String TAG = "DBOpenHelper";
   public static final String TABLE_NAME = "WORDBOOK";
   
   public static final String ORIGINAL_WORD_KEY = "ORIGINAL_WORD";
@@ -26,12 +26,12 @@ public class DBOpenHelper extends SQLiteOpenHelper{
 
   public static DBOpenHelper getDbOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
     if(dbHelper != null) {
-      Log.d(tag, "call singletun : helper not null");
+      Log.d(TAG, "call singletun : helper not null");
       return dbHelper;
     }
     else{
       dbHelper = new DBOpenHelper(context, name, factory, version);
-      Log.d(tag, "call singletun : helper null");
+      Log.d(TAG, "call singletun : helper null");
       return dbHelper;
     }
   }
@@ -43,7 +43,7 @@ public class DBOpenHelper extends SQLiteOpenHelper{
 
   public void dbClose(){
     db.close();
-    Log.d(tag, "database close");
+    Log.d(TAG, "database close");
   }
 
   @Override
@@ -64,12 +64,12 @@ public class DBOpenHelper extends SQLiteOpenHelper{
       ", " +
       TRANSLATED_WORD_KEY + " TEXT" +
       ")";
-    Log.d(tag, "SQL EXEC : " + sql);
+    Log.d(TAG, "SQL EXEC : " + sql);
     try{
       db.execSQL(sql);
-      Log.d(tag, "create db : " + TABLE_NAME);
+      Log.d(TAG, "create db : " + TABLE_NAME);
     } catch (Exception e){
-     Log.d(tag, "create table exception : " + e.toString());
+     Log.d(TAG, "create table exception : " + e.toString());
     }
   }
 
@@ -79,11 +79,11 @@ public class DBOpenHelper extends SQLiteOpenHelper{
     wordValue.put(TRANSLATED_WORD_KEY, translatedWord);
     long result = db.insert(TABLE_NAME, null, wordValue);
     if(result == -1){
-      Log.d(tag, "insert error : orig : " + originalWord + " , trans : " + translatedWord);
+      Log.d(TAG, "insert error : orig : " + originalWord + " , trans : " + translatedWord);
       return false;
     }
     else{
-      Log.d(tag, "insert success : orig : " + originalWord + " , trans : " + translatedWord);
+      Log.d(TAG, "insert success : orig : " + originalWord + " , trans : " + translatedWord);
       return true;
     }
   }

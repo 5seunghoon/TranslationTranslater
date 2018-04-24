@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
   private static final int MAX_IMAGE_SIZE = 200000; // width * hieght
 
+  private final String TAG = "mainActivityTAG";
+
   private int dbVersion = 1;
   protected DBOpenHelper dbHelper;
   //protected SQLiteDatabase db;
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
   LinearLayout moreButtonLayout;
   ActionBar actionBar;
 
-  String tag = "mainActivityTAG";
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -250,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
       case REQUEST_TAKE_PHOTO:
         if(resultCode == Activity.RESULT_OK) {
           try{
-            Log.d(tag, "REQUEST TAKE PHOTO OK");
+            Log.d(TAG, "REQUEST TAKE PHOTO OK");
             File albumFile = null;
             albumFile = createImageFile();
             //cropImage(): cropSoureURI 위치의 파일을 잘라서 cropEndURI로 저장
@@ -259,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
             cropEndURI = Uri.fromFile(albumFile);
             cropImage();
           } catch (Exception e) {
-            Log.e(tag, "REQUEST TAKE PHOTO" + e.toString());
+            Log.e(TAG, "REQUEST TAKE PHOTO" + e.toString());
           }
         } else {
           Toast.makeText(this, "사진찍기를 취소하였습니다.", Toast.LENGTH_LONG).show();
@@ -276,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
               cropEndURI = Uri.fromFile(albumFile);
               cropImage();
             } catch (Exception e){
-              Log.e(tag, "REQUEST TAKE ALBUM" + e.toString());
+              Log.e(TAG, "REQUEST TAKE ALBUM" + e.toString());
             }
           }
         }
@@ -335,9 +337,9 @@ public class MainActivity extends AppCompatActivity {
   }
   public void doCamera() {
     if(checkPermissions()){
-      Log.d(tag, "check permission end");
+      Log.d(TAG, "check permission end");
       captureCamera();
-      Log.d(tag, "capture camera func end");
+      Log.d(TAG, "capture camera func end");
     }
 
     return;
@@ -349,9 +351,9 @@ public class MainActivity extends AppCompatActivity {
 
   public void doGallery() {
     if(checkPermissions()){
-      Log.d(tag, "check permission end");
+      Log.d(TAG, "check permission end");
       getAlbum();
-      Log.d(tag, "get album func end");
+      Log.d(TAG, "get album func end");
     }
 
     return;
@@ -360,25 +362,25 @@ public class MainActivity extends AppCompatActivity {
     String state = Environment.getExternalStorageState();
     if(Environment.MEDIA_MOUNTED.equals(state)) {
       Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-      Log.d(tag, "intent takePictureIntent init");
+      Log.d(TAG, "intent takePictureIntent init");
 
       if(takePictureIntent.resolveActivity(getPackageManager()) != null) {
-        Log.d(tag, "if takePictureIntent.resolveActivity(getPackageManager()) != null");
+        Log.d(TAG, "if takePictureIntent.resolveActivity(getPackageManager()) != null");
         File photoFile = null;
         try {
           photoFile = createImageFile();
         } catch (IOException ex){
-          Log.e(tag, "captureCamera Error" + ex.toString());
+          Log.e(TAG, "captureCamera Error" + ex.toString());
         }
         if (photoFile != null) {
-          Log.d(tag, "photo file make success");
+          Log.d(TAG, "photo file make success");
           //make photo file success
           Uri providerURI = FileProvider.getUriForFile(this, "com.tistory.deque.translationtranslater", photoFile);
-          Log.d(tag, "providerURI : " + providerURI);
+          Log.d(TAG, "providerURI : " + providerURI);
           imageURI = providerURI;
           takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerURI);
-          Log.d(tag, "intent put extra (providerURI) success : " + providerURI);
-          Log.d(tag, "start activity : takepictureintent");
+          Log.d(TAG, "intent put extra (providerURI) success : " + providerURI);
+          Log.d(TAG, "start activity : takepictureintent");
           startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
         }
       } else {
@@ -387,43 +389,43 @@ public class MainActivity extends AppCompatActivity {
     }
   }
   public File createImageFile() throws IOException {
-    Log.d(tag, "createImageFile func");
+    Log.d(TAG, "createImageFile func");
     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
     String imageFileName = "JPEG_" + timeStamp + ".jpg";
     File imageFile = null;
     File storageDir = new File(Environment.getExternalStorageDirectory() + "/Pictures", "t2");
-    Log.d(tag, "storageDir : " + storageDir);
+    Log.d(TAG, "storageDir : " + storageDir);
     if (!storageDir.exists()) {
-      Log.d(tag, storageDir.toString() + " is not exist");
+      Log.d(TAG, storageDir.toString() + " is not exist");
       storageDir.mkdir();
-      Log.d(tag, "storageDir make");
+      Log.d(TAG, "storageDir make");
     }
     imageFile = new File(storageDir, imageFileName);
-    Log.d(tag, "imageFile init");
+    Log.d(TAG, "imageFile init");
     mCurrentPhotoPath = imageFile.getAbsolutePath();
-    Log.d(tag, "mCurrentPhotoPath : " + mCurrentPhotoPath);
+    Log.d(TAG, "mCurrentPhotoPath : " + mCurrentPhotoPath);
 
     return imageFile;
   }
 
 
   private void getAlbum() {
-    Log.d(tag, "getAlbum()");
+    Log.d(TAG, "getAlbum()");
     Intent intent = new Intent(Intent.ACTION_PICK);
     intent.setType("image/*");
     intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-    Log.d(tag, "start Activity : album intent");
+    Log.d(TAG, "start Activity : album intent");
     startActivityForResult(intent, REQUEST_TAKE_ALBUM);
   }
 
   private void galleryAddPic() {
-    Log.d(tag, "galleryAddPic, do media scan");
+    Log.d(TAG, "galleryAddPic, do media scan");
     Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
     File f = new File(mCurrentPhotoPath);
     Uri contentUri = Uri.fromFile(f);
     mediaScanIntent.setData(contentUri);
     sendBroadcast(mediaScanIntent);
-    Log.d(tag, "media scanning end");
+    Log.d(TAG, "media scanning end");
   }
 
   public void cropImage() {
@@ -431,8 +433,8 @@ public class MainActivity extends AppCompatActivity {
      * cropSourceURI = 자를 uri
      * cropEndURI = 자르고 난뒤 uri
      */
-    Log.d(tag, "cropImage() CALL");
-    Log.d(tag, "cropImage() : Photo URI, Album URI" + cropSourceURI + ", " + cropEndURI);
+    Log.d(TAG, "cropImage() CALL");
+    Log.d(TAG, "cropImage() : Photo URI, Album URI" + cropSourceURI + ", " + cropEndURI);
 
     Intent cropIntent = new Intent("com.android.camera.action.CROP");
 
@@ -447,7 +449,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void resizingImage() {
-    Log.d(tag, "call resizing image");
+    Log.d(TAG, "call resizing image");
     int org_width, org_height;
     int result_width, result_height;
 
@@ -456,34 +458,34 @@ public class MainActivity extends AppCompatActivity {
     try {
       srcBmp = MediaStore.Images.Media.getBitmap(getContentResolver(), cropEndURI);
     } catch (Exception e){
-      Log.d(tag, "bitmap load exception : " + e.toString());
+      Log.d(TAG, "bitmap load exception : " + e.toString());
       return;
     }
-    Log.d(tag, "Bitmap load success");
+    Log.d(TAG, "Bitmap load success");
     org_width = srcBmp.getWidth();
     org_height = srcBmp.getHeight();
 
     if (MAX_IMAGE_SIZE < org_height * org_width) {
       double rate = Math.sqrt((org_height * org_width) / MAX_IMAGE_SIZE);
-      Log.d(tag, "orginal width : " + org_width + " , orginal height : " + org_height);
-      Log.d(tag, "it is big iamge. resizing " + rate + " percent.");
+      Log.d(TAG, "orginal width : " + org_width + " , orginal height : " + org_height);
+      Log.d(TAG, "it is big iamge. resizing " + rate + " percent.");
       result_width = (int) (org_width / rate);
       result_height = (int) (org_height / rate);
 
       FileOutputStream fosObj;
 
       try {
-        Log.d(tag, "resizing start : " + result_height + " , " + result_width);
+        Log.d(TAG, "resizing start : " + result_height + " , " + result_width);
         Bitmap resizedBmp = Bitmap.createScaledBitmap(srcBmp, result_width, result_height, true);
-        Log.d(tag, "resizing");
+        Log.d(TAG, "resizing");
         fosObj = new FileOutputStream(cropEndURI.getPath());
-        Log.d(tag, "get file output stream");
+        Log.d(TAG, "get file output stream");
         resizedBmp.compress(Bitmap.CompressFormat.JPEG, 100, fosObj);
-        Log.d(tag, "rewrite");
+        Log.d(TAG, "rewrite");
         fosObj.flush();
         fosObj.close();
       } catch (Exception e) {
-        Log.d(tag, "file write exception : " + e.toString());
+        Log.d(TAG, "file write exception : " + e.toString());
       }
     }
   }
@@ -524,7 +526,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private boolean checkPermissions() {
-    Log.d(tag, "check permissions func in");
+    Log.d(TAG, "check permissions func in");
     int result;
     List<String> permissionList = new ArrayList<>();
     for (String pm : permissions) {

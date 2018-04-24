@@ -21,14 +21,14 @@ public class OCRTaskActivity extends AppCompatActivity {
   private long backPressedTime;
   private String loadingText = "";
 
-  private Uri resultImageURI;
-  private static String tag = "ocrTaskActivityTAG";
+  private Uri resultImageUri;
+  private static String TAG = "ocrTaskActivityTAG";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ocr_task);
-    Log.d(tag, "start Activity");
+    Log.d(TAG, "start Activity");
 
     imageView = findViewById(R.id.imageView);
     textView = findViewById(R.id.editText);
@@ -55,16 +55,16 @@ public class OCRTaskActivity extends AppCompatActivity {
   }
   private void ocr(){
     textView.setText(loadingText);
-    Log.d(tag, "getBase64Encoded func");
+    Log.d(TAG, "getBase64Encoded func");
     Intent intent = getIntent();
-    resultImageURI = (Uri) intent.getExtras().get("IMAGE_URI");
-    Log.d(tag, "image uri : " + resultImageURI);
-    imageView.setImageURI(resultImageURI);
+    resultImageUri = (Uri) intent.getExtras().get("IMAGE_URI");
+    Log.d(TAG, "image uri : " + resultImageUri);
+    imageView.setImageURI(resultImageUri);
 
     OCRTask _OCRTask = new OCRTask(getApplicationContext(), okButton, cancleButton);
-    Log.d(tag, "OCRTask success make");
+    Log.d(TAG, "OCRTask success make");
 
-    _OCRTask.setImageURI(resultImageURI);
+    _OCRTask.setmImageURI(resultImageUri);
     _OCRTask.setTextView(textView);
     _OCRTask.setImageView(imageView);
     _OCRTask.RUN();
