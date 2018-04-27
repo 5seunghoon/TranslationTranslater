@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
   private static final int REQUEST_OCR_STRING = 104;
   private static final int MULTIPLE_PERMISSIONS = 200; //권한 동의 여부 문의 후 CallBack 함수에 쓰일 변수
 
-  private static final int MAX_IMAGE_SIZE = 200000; // width * hieght
+  private static final int MAX_IMAGE_SIZE = 100000; // width * hieght
 
   private final String TAG = "mainActivityTAG";
 
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     inputEditText.clearFocus(); //when create activity, we must hide keyboard
 
-    //dbInsertTest();
+    dbInsertTest();
   }
 
   @Override
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.actionbar_actions, menu);
+    getMenuInflater().inflate(R.menu.actionbar_actions, menu); // 액션바에 actionbar_actions를 붙임
     return super.onCreateOptionsMenu(menu);
   }
 

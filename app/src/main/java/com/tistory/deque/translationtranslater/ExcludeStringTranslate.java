@@ -101,27 +101,27 @@ public class ExcludeStringTranslate {
   }
 
   public void doHashingText(){
-    tableIndex = 1;
-    String sql = "SELECT * FROM " + dbHelper.TABLE_NAME + ";";
-    Cursor results = null;
-    results = dbHelper.db.rawQuery(sql, null);
-    Log.d(tag, "Cursor open");
-    results.moveToFirst();
-    while(!results.isAfterLast()){
-      int id = results.getInt(0);
-      String origin = results.getString(1);
-      Log.d(tag, "get1 : " + origin);
-      String value = results.getString(2);
-      Log.d(tag, "get2 : " + value);
+      tableIndex = 1;
+      String sql = "SELECT * FROM " + dbHelper.TABLE_NAME + ";";
+      Cursor results = null;
+      results = dbHelper.db.rawQuery(sql, null);
+      Log.d(tag, "Cursor open");
+      results.moveToFirst();
+      while(!results.isAfterLast()){
+        int id = results.getInt(0);
+        String origin = results.getString(1);
+        Log.d(tag, "get1 : " + origin);
+        String value = results.getString(2);
+        Log.d(tag, "get2 : " + value);
 
-      //if origianalText has match text with origin of database, replace that...
-      originalText = originalText.replaceAll("(?i)" + origin, intTo4digitString(tableIndex));
-      excludingTable.add(new ExcludingMember(intTo4digitString(tableIndex), origin, value));
-      Log.d(tag, "KEY : " + intTo4digitString(tableIndex) + ", ORIGIN : " + origin + ", VALUE : " + value);
-      Log.d(tag, "ORIGINAL TEXT : " + originalText);
-      tableIndex++;
+        //if origianalText has match text with origin of database, replace that...
+        originalText = originalText.replaceAll("(?i)" + origin, intTo4digitString(tableIndex));
+        excludingTable.add(new ExcludingMember(intTo4digitString(tableIndex), origin, value));
+        Log.d(tag, "KEY : " + intTo4digitString(tableIndex) + ", ORIGIN : " + origin + ", VALUE : " + value);
+        Log.d(tag, "ORIGINAL TEXT : " + originalText);
+        tableIndex++;
 
-      results.moveToNext();
+        results.moveToNext();
     }
     results.close();
     Log.d(tag, "Cursor close");
