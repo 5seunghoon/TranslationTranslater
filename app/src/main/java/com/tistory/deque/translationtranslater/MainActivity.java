@@ -1,17 +1,13 @@
 package com.tistory.deque.translationtranslater;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,9 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
   public enum viewState { NORMAL, EXTAND }
@@ -48,13 +42,6 @@ public class MainActivity extends AppCompatActivity {
   private int dbVersion = 1;
   protected DBOpenHelper dbHelper;
   //protected SQLiteDatabase db;
-
-  private String[] permissions = {
-    Manifest.permission.READ_EXTERNAL_STORAGE,
-    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    Manifest.permission.CAMERA,
-  };
-
   Uri imageURI, cropSourceURI, cropEndURI;
   long backPressedTime;
   String mCurrentPhotoPath;
@@ -69,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
   LinearLayout originalTextAndButtonLayout;
   LinearLayout moreButtonLayout;
   ActionBar actionBar;
+  Permission permission;
 
 
 
@@ -86,12 +74,14 @@ public class MainActivity extends AppCompatActivity {
     moreButtonLayout = findViewById(R.id.moreButtonLayout);
 
     actionBar = getSupportActionBar();
+    permission = new Permission(getApplicationContext(), this);
+    permission.permissionSnackbarInit(findViewById(R.id.mainActivityMainLayout));
 
     imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
     setTitle(R.string.app_name);
 
-    checkPermissions();
+    permission.checkPermissions();
     dbOpen();
 
     viewstate = viewState.NORMAL;
@@ -336,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
     doCamera();
   }
   public void doCamera() {
-    if(checkPermissions()){
+    if(permission.checkPermissions()){
       Log.d(TAG, "check permission end");
       captureCamera();
       Log.d(TAG, "capture camera func end");
@@ -350,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void doGallery() {
-    if(checkPermissions()){
+    if(permission.checkPermissions()){
       Log.d(TAG, "check permission end");
       getAlbum();
       Log.d(TAG, "get album func end");
@@ -493,52 +483,8 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-    switch (requestCode) {
-      case MULTIPLE_PERMISSIONS: {
-        if (grantResults.length > 0) {
-          for (int i = 0; i < permissions.length; i++) {
-            if (permissions[i].equals(this.permissions[0])) {
-              if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                showNoPermissionToastAndFinish();
-              }
-            } else if (permissions[i].equals(this.permissions[1])) {
-              if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                showNoPermissionToastAndFinish();
-
-              }
-            } else if (permissions[i].equals(this.permissions[2])) {
-              if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                showNoPermissionToastAndFinish();
-
-              }
-            }
-          }
-        } else {
-          showNoPermissionToastAndFinish();
-        }
-        return;
-      }
-    }
+    permission.requestPermissionsResult(requestCode, permissions, grantResults);
   }
 
-  private void showNoPermissionToastAndFinish() {
-    Toast.makeText(this, "권한 요청에 동의 해주셔야 이용 가능합니다. 설정에서 권한 허용 하시기 바랍니다.", Toast.LENGTH_SHORT).show();
-  }
 
-  private boolean checkPermissions() {
-    Log.d(TAG, "check permissions func in");
-    int result;
-    List<String> permissionList = new ArrayList<>();
-    for (String pm : permissions) {
-      result = ContextCompat.checkSelfPermission(this, pm);
-      if (result != PackageManager.PERMISSION_GRANTED) { //사용자가 해당 권한을 가지고 있지 않을 경우 리스트에 해당 권한명 추가
-        permissionList.add(pm);
-      }
-    }
-    if (!permissionList.isEmpty()) { //권한이 추가되었으면 해당 리스트가 empty가 아니므로 request 즉 권한을 요청합니다.
-      ActivityCompat.requestPermissions(this, permissionList.toArray(new String[permissionList.size()]), MULTIPLE_PERMISSIONS);
-      return false;
-    }
-    return true;
-  }
 }
