@@ -20,11 +20,11 @@
       android:background="@android:color/white"
       android:orientation="vertical">
 
-      <ScrollView
+      <ListView
+        android:id="@+id/word_list"
         android:layout_width="match_parent"
         android:layout_height="300dp">
-
-      </ScrollView>
+      </ListView>
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -48,13 +48,11 @@
           android:inputType="textPersonName"
           android:hint="to word"
           />
-
         <Button
           android:id="@+id/add_btn"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:text="Add Word" />
-
       </LinearLayout>
     </LinearLayout>
   </LinearLayout>
