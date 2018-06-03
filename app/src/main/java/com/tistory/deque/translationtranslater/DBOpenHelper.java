@@ -2,9 +2,12 @@ package com.tistory.deque.translationtranslater;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 /**
  * Created by HELLOEARTH on 2018-04-02.
@@ -86,5 +89,28 @@ public class DBOpenHelper extends SQLiteOpenHelper{
       Log.d(TAG, "insert success : orig : " + originalWord + " , trans : " + translatedWord);
       return true;
     }
+  }
+
+  public ArrayList<ExcludingMember> getWords() {
+    int tableIndex = 1;
+    ArrayList<ExcludingMember> wordBook = new ArrayList<ExcludingMember>();
+
+    String sql = "SELECT * FROM " + dbHelper.TABLE_NAME + ";";
+    Cursor results = null;
+    results = dbHelper.db.rawQuery(sql, null);
+    results.moveToFirst();
+    while(!results.isAfterLast()){
+      int id = results.getInt(0);
+      String origin = results.getString(1);
+      String value = results.getString(2);
+
+      ExcludingMember temp = new ExcludingMember(id, ExcludingMember.intTo4digitString(tableIndex), origin, value);
+      tableIndex++;
+
+      wordBook.add(temp);
+      results.moveToNext();
+    }
+    results.close();
+    return wordBook;
   }
 }
