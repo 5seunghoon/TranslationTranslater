@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.tistory.deque.translationtranslater.WordBookActivity;
+
 public class MainActivity extends AppCompatActivity {
   public enum viewState { NORMAL, EXTAND }
   private static final int REQUEST_TAKE_PHOTO = 101;
@@ -211,6 +213,9 @@ public class MainActivity extends AppCompatActivity {
     return;
   }
   public void doWordbook() {
+    Intent intent = new Intent(this, WordBookActivity.class);
+
+    startActivity(intent);
     return;
   }
 
