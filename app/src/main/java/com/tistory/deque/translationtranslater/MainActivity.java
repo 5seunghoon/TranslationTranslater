@@ -166,6 +166,11 @@ public class MainActivity extends AppCompatActivity {
   private void dbInsertTest() {
     dbHelper.insertWord("PYTHON", "파이썬");
     dbHelper.insertWord("AJAX", "에이젝스");
+
+    dbHelper.insertHistory("HELLO THIS IS FOR TEST1!!","THIS IS FOR TEST 1AGAIN!!");
+    dbHelper.insertHistory("HELLO THIS IS FOR TEST2!!","THIS IS FOR TEST 2?!");
+    dbHelper.insertHistory("HELLO THIS IS FOR TEST3!!","THIS IS FOR TEST 3AGAIN!!");
+    dbHelper.insertHistory("HELLO THIS IS FOR TEST4!!","THIS IS FOR TEST 4AGAIN!!");
   }
 
   @Override
@@ -242,7 +247,8 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void doHistory() {
-    return;
+    Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+    startActivity(intent);
   }
   public void doWordbook() {
     Intent intent = new Intent(this, WordBookActivity.class);

@@ -40,7 +40,8 @@
       </intent-filter>
     </activity>
     <activity android:name=".OCRTaskActivity" />
-    <activity android:name=".WordBookActivity"></activity>
+    <activity android:name=".WordBookActivity"/>
+    <activity android:name=".HistoryActivity" />
   </application>
 
 </manifest>
