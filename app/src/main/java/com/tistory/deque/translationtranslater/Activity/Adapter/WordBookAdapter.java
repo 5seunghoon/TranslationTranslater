@@ -1,4 +1,4 @@
-package com.tistory.deque.translationtranslater.Adapter;
+package com.tistory.deque.translationtranslater.Activity.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

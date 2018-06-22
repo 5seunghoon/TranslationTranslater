@@ -1,4 +1,4 @@
-package com.tistory.deque.translationtranslater.DB;
+package com.tistory.deque.translationtranslater.Model.DB;
 
 import android.content.ContentValues;
 import android.content.Context;

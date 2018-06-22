@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tistory.deque.translationtranslater.DB.DBOpenHelper;
+import com.tistory.deque.translationtranslater.Model.DB.DBOpenHelper;
 import com.tistory.deque.translationtranslater.Model.ExcludingMember;
 
 import java.util.ArrayList;

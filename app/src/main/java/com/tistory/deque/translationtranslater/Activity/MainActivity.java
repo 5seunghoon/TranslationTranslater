@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.tistory.deque.translationtranslater.DB.DBOpenHelper;
+import com.tistory.deque.translationtranslater.Model.DB.DBOpenHelper;
 import com.tistory.deque.translationtranslater.Controler.ExcludeStringTranslate;
 import com.tistory.deque.translationtranslater.Util.Permission;
 import com.tistory.deque.translationtranslater.R;
