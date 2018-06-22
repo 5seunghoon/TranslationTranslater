@@ -131,6 +131,28 @@ public class DBOpenHelper extends SQLiteOpenHelper{
     db.update(TABLE_NAME, newValues, "_ID=?", new String[]{id+""});
   }
 
+  public ArrayList<HistoryItem> getHistory(){
+    int tableIndex = 1;
+    ArrayList<HistoryItem> HistoryList = new ArrayList<HistoryItem>();
+
+    String sql = "SELECT * FROM " + dbHelper.TABLE_HISTORY + ";";
+    Cursor results = null;
+    results =dbHelper.db.rawQuery(sql, null);
+    results.moveToFirst();
+    while(!results.isAfterLast()) {
+      int id = results.getInt(0);
+      String origin = results.getString(1);
+      String translated = results.getString(2);
+
+      HistoryItem newEntry = new HistoryItem(origin,translated);
+      tableIndex++;
+
+      HistoryList.add(newEntry);
+      results.moveToNext();
+    }
+    results.close();
+    return HistoryList;
+  }
   public ArrayList<ExcludingMember> getWords() {
     int tableIndex = 1;
     ArrayList<ExcludingMember> wordBook = new ArrayList<ExcludingMember>();
