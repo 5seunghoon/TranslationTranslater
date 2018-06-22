@@ -1,4 +1,4 @@
-package com.tistory.deque.translationtranslater;
+package com.tistory.deque.translationtranslater.Util;
 
 import android.Manifest;
 import android.app.Activity;

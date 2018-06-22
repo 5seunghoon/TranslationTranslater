@@ -1,4 +1,4 @@
-package com.tistory.deque.translationtranslater;
+package com.tistory.deque.translationtranslater.Activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +20,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.tistory.deque.translationtranslater.DB.DBOpenHelper;
+import com.tistory.deque.translationtranslater.Controler.ExcludeStringTranslate;
+import com.tistory.deque.translationtranslater.Util.Permission;
+import com.tistory.deque.translationtranslater.R;
 
 import java.io.File;
 import java.io.FileOutputStream;

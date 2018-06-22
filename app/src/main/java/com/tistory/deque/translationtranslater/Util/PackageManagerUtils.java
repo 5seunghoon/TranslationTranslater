@@ -1,4 +1,4 @@
-package com.tistory.deque.translationtranslater;
+package com.tistory.deque.translationtranslater.Util;
 
 /**
  * Created by HELLOEARTH on 2018-03-31.

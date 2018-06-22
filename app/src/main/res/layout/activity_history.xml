@@ -6,7 +6,7 @@
   android:layout_gravity="center"
   android:background="@android:color/white"
   android:orientation="vertical"
-  tools:context="com.tistory.deque.translationtranslater.OCRTaskActivity">
+  tools:context="com.tistory.deque.translationtranslater.Activity.OCRTaskActivity">
 
 
     <TextView
