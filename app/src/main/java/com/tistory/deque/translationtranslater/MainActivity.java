@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
   private final String TAG = "mainActivityTAG";
 
+  private String preEditString;
+
   private int dbVersion = 1;
   protected DBOpenHelper dbHelper;
   //protected SQLiteDatabase db;
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
   Toast backToast;
 
   EditText inputEditText;
-  Button translateButton;
+  Button translateButton, shareButton, resetButton;
   EditText translateTextView;
   String originalString;
   InputMethodManager imm;
@@ -73,7 +75,13 @@ public class MainActivity extends AppCompatActivity {
     originalTextAndButtonLayout = findViewById(R.id.originalTextAndButtonLayout);
     moreButtonLayout = findViewById(R.id.moreButtonLayout);
 
+    shareButton = findViewById(R.id.shareButton);
+    resetButton = findViewById(R.id.resetButton);
+
     actionBar = getSupportActionBar();
+
+    setClickListener();
+
     permission = new Permission(getApplicationContext(), this);
     permission.permissionSnackbarInit(findViewById(R.id.mainActivityMainLayout));
 
@@ -93,6 +101,29 @@ public class MainActivity extends AppCompatActivity {
     inputEditText.clearFocus(); //when create activity, we must hide keyboard
 
     dbInsertTest();
+  }
+
+  private void setClickListener() {
+    translateButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        clickTranslateButton(v);
+      }
+    });
+
+    shareButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        clickShareButton(v);
+      }
+    });
+
+    resetButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        clickResetButton();
+      }
+    });
   }
 
   @Override
@@ -191,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
     }
   }
   public void doNormalStateToExtandState() {
+    preEditString = translateTextView.getText().toString();
     viewstate = viewState.EXTAND;
     originalTextAndButtonLayout.setVisibility(View.GONE);
     moreButtonLayout.setVisibility(View.VISIBLE);
@@ -288,6 +320,7 @@ public class MainActivity extends AppCompatActivity {
       // TODO need add "default" case
     }
   }
+
   public void clickTranslateButton(View view) {
     originalString = inputEditText.getText().toString();
     if (originalString.isEmpty()) return;
@@ -297,12 +330,6 @@ public class MainActivity extends AppCompatActivity {
       new ExcludeStringTranslate(getApplicationContext(), dbHelper, translateTextView);
     translatingClass.setOriginalString(inputEditText.getText().toString());
     translatingClass.translate();
-  }
-  public void clickResetButton(View view) {
-    doReset();
-  }
-  public void doReset() {
-    return;
   }
 
   public void clickShareButton(View view) {
@@ -322,9 +349,14 @@ public class MainActivity extends AppCompatActivity {
     startActivity(Intent.createChooser(shareIntent, "번역 결과 공유하기"));
   }
 
-  public void clickCameraButton(View view) {
-    doCamera();
+  public void clickResetButton(){
+    doReset();
   }
+
+  public void doReset(){
+    translateTextView.setText(preEditString);
+  }
+
   public void doCamera() {
     if(permission.checkPermissions()){
       Log.d(TAG, "check permission end");
@@ -333,10 +365,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     return;
-  }
-
-  public void clickGalleryButton(View view) {
-    doGallery();
   }
 
   public void doGallery() {

@@ -66,7 +66,6 @@
             android:layout_width="96dp"
             android:layout_height="56dp"
             android:gravity="center"
-            android:onClick="clickTranslateButton"
             android:text="@string/translateButton_text"
             android:textColor="@android:color/white"
             android:textSize="16sp"
@@ -123,7 +122,6 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="clickResetButton"
         android:text="RESET" />
 
       <Space
@@ -137,7 +135,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:onClick="clickShareButton"
         android:text="SHARE" />
 
     </LinearLayout>
