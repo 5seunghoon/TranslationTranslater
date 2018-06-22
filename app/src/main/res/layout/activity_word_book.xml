@@ -23,8 +23,7 @@
       <ListView
         android:id="@+id/word_list"
         android:layout_width="match_parent"
-        android:layout_height="300dp">
-      </ListView>
+        android:layout_height="300dp"></ListView>
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -53,6 +52,24 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:text="Add Word" />
+
+        <Button
+          android:id="@+id/edit_btn"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Edit Word" />
+
+        <Button
+          android:id="@+id/delete_btn"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Delete Word" />
+
+        <Button
+          android:id="@+id/add_mode_btn"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Add Mode" />
       </LinearLayout>
     </LinearLayout>
   </LinearLayout>
