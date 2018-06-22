@@ -30,7 +30,7 @@ public class ExcludeStringTranslate {
 
   private String tag = "stringExclusionTranslateClass";
 
-  public ExcludeStringTranslate(Context context, DBOpenHelper dbHelpler, TextView translatedTextView) {
+  ExcludeStringTranslate(Context context, DBOpenHelper dbHelpler, TextView translatedTextView) {
     this.context = context;
     this.dbHelper = dbHelpler;
     this.translatedTextView = translatedTextView;
@@ -45,10 +45,9 @@ public class ExcludeStringTranslate {
     this.translatedText = translatedText;
     unHashingText();
     translatedTextView.setText(this.translatedText);
-    return;
   }
 
-  public void doHashingText() {
+  private void doHashingText() {
     tableIndex = 1;
     String sql = "SELECT * FROM " + dbHelper.TABLE_NAME + ";";
     Cursor results = null;
@@ -75,8 +74,13 @@ public class ExcludeStringTranslate {
     Log.d(tag, "Cursor close");
   }
 
-  public void unHashingText() {
-    return;
+  private void unHashingText() {
+    Log.d(tag, "do unHasingText");
+    for(ExcludingMember excludingMember : excludingTable){
+      String excludingMemberKey = excludingMember.getKey();
+      translatedText = translatedText.replaceAll("" + excludingMemberKey, excludingMember.getValue());
+    }
+    Log.d(tag, "end unHashingText");
   }
 
   public void translate() {

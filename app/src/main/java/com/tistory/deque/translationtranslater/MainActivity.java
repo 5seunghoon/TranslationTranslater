@@ -27,8 +27,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.tistory.deque.translationtranslater.WordBookActivity;
-
 public class MainActivity extends AppCompatActivity {
   public enum viewState { NORMAL, EXTAND }
   private static final int REQUEST_TAKE_PHOTO = 101;
@@ -374,8 +372,6 @@ public class MainActivity extends AppCompatActivity {
       captureCamera();
       Log.d(TAG, "capture camera func end");
     }
-
-    return;
   }
 
   public void doGallery() {
@@ -384,8 +380,6 @@ public class MainActivity extends AppCompatActivity {
       getAlbum();
       Log.d(TAG, "get album func end");
     }
-
-    return;
   }
   private void captureCamera() {
     String state = Environment.getExternalStorageState();
