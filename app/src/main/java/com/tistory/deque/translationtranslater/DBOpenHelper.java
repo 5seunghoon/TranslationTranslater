@@ -91,6 +91,18 @@ public class DBOpenHelper extends SQLiteOpenHelper{
     }
   }
 
+  public void deleteWord(int id) {
+    db.delete(TABLE_NAME, "_ID=?", new String[]{id+""});
+  }
+
+  public void updateWord(int id, String originalWord, String translatedWord) {
+    ContentValues newValues = new ContentValues();
+    newValues.put(ORIGINAL_WORD_KEY, originalWord);
+    newValues.put(TRANSLATED_WORD_KEY, translatedWord);
+
+    db.update(TABLE_NAME, newValues, "_ID=?", new String[]{id+""});
+  }
+
   public ArrayList<ExcludingMember> getWords() {
     int tableIndex = 1;
     ArrayList<ExcludingMember> wordBook = new ArrayList<ExcludingMember>();
