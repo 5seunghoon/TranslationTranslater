@@ -2,20 +2,15 @@ package com.tistory.deque.translationtranslater;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 
 import java.util.ArrayList;
 
 public class WordBookActivity extends AppCompatActivity {
-
   private DBOpenHelper dbHelper;
   private final int dbVersion = 1;
 
@@ -23,6 +18,9 @@ public class WordBookActivity extends AppCompatActivity {
   EditText wordKey;
   EditText wordValue;
   Button addButton;
+  Button deleteButton;
+  Button editButton;
+  Button addModeButton;
 
   ArrayList<ExcludingMember> WordBookList;
 
@@ -34,6 +32,9 @@ public class WordBookActivity extends AppCompatActivity {
     wordBookDBOpen();
 
     addButton = findViewById(R.id.add_btn);
+    addModeButton = findViewById(R.id.add_mode_btn);
+    deleteButton = findViewById(R.id.delete_btn);
+    editButton = findViewById(R.id.edit_btn);
     wordKey = findViewById(R.id.word_key);
     wordValue = findViewById(R.id.word_value);
 
@@ -48,6 +49,9 @@ public class WordBookActivity extends AppCompatActivity {
         String value = wordValue.getText().toString();
 
         addWordBook(key, value);
+        clearInput();
+      }
+    });
 
         wordKey.setText("");
         wordValue.setText("");
@@ -66,9 +70,33 @@ public class WordBookActivity extends AppCompatActivity {
     dbHelper.dbOpen();
   }
 
-  private void addWordBook(String key, String value) {
-    dbHelper.insertWord(key, value);
-    WordBookAdapter adapter = new WordBookAdapter(this, dbHelper.getWords());
+  private void addWordBook(String origin, String translated) {
+    dbHelper.insertWord(origin, translated);
+    updateView();
+  }
+  private void toggleMode(boolean editMode) {
+    Button addBtn = findViewById(R.id.add_btn);
+    Button editBtn = findViewById(R.id.edit_btn);
+    Button deleteBtn = findViewById(R.id.delete_btn);
+    Button addModeBtn = findViewById(R.id.add_mode_btn);
+
+    if (editMode) {
+      addBtn.setVisibility(View.GONE);
+      editBtn.setVisibility(View.VISIBLE);
+      deleteBtn.setVisibility(View.VISIBLE);
+      addModeBtn.setVisibility(View.VISIBLE);
+    } else {
+      addBtn.setVisibility(View.VISIBLE);
+      editBtn.setVisibility(View.GONE);
+      deleteBtn.setVisibility(View.GONE);
+      addModeBtn.setVisibility(View.GONE);
+    }
+  }
+
+  public void clearInput() {
+    wordKey.setText("");
+    wordValue.setText("");
+  }
     wordList.setAdapter(adapter);
   }
 }
