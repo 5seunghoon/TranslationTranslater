@@ -52,7 +52,9 @@ public class WordBookActivity extends AppCompatActivity {
       public void onClick(View v) {
         String key = wordKey.getText().toString();
         String value = wordValue.getText().toString();
-
+        if (key.length() == 0 || value.length() ==0) {
+          return;
+        }
         addWordBook(key, value);
         clearInput();
       }
