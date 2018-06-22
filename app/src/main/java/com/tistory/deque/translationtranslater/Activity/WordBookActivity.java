@@ -1,4 +1,4 @@
-package com.tistory.deque.translationtranslater;
+package com.tistory.deque.translationtranslater.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +7,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import com.tistory.deque.translationtranslater.Model.DB.*;
+import com.tistory.deque.translationtranslater.Model.ExcludingMember;
+import com.tistory.deque.translationtranslater.R;
+import com.tistory.deque.translationtranslater.Activity.Adapter.*;
 
 import java.util.ArrayList;
 
@@ -47,7 +52,9 @@ public class WordBookActivity extends AppCompatActivity {
       public void onClick(View v) {
         String key = wordKey.getText().toString();
         String value = wordValue.getText().toString();
-
+        if (key.length() == 0 || value.length() ==0) {
+          return;
+        }
         addWordBook(key, value);
         clearInput();
       }
@@ -123,8 +130,8 @@ public class WordBookActivity extends AppCompatActivity {
       addModeBtn.setVisibility(View.VISIBLE);
     } else {
       addBtn.setVisibility(View.VISIBLE);
-      editBtn.setVisibility(View.GONE);
-      deleteBtn.setVisibility(View.GONE);
+      editBtn.setVisibility(View.INVISIBLE);
+      deleteBtn.setVisibility(View.INVISIBLE);
       addModeBtn.setVisibility(View.GONE);
     }
   }

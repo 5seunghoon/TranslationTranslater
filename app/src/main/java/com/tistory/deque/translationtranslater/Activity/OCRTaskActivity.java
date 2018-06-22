@@ -1,4 +1,4 @@
-package com.tistory.deque.translationtranslater;
+package com.tistory.deque.translationtranslater.Activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tistory.deque.translationtranslater.Controler.OCRTask;
+import com.tistory.deque.translationtranslater.R;
 
 public class OCRTaskActivity extends AppCompatActivity {
 

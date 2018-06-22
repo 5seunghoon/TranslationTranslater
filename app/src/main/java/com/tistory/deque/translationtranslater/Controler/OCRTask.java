@@ -1,4 +1,4 @@
-package com.tistory.deque.translationtranslater;
+package com.tistory.deque.translationtranslater.Controler;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,6 +23,9 @@ import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
+import com.tistory.deque.translationtranslater.Activity.OCRTaskActivity;
+import com.tistory.deque.translationtranslater.R;
+import com.tistory.deque.translationtranslater.Util.PackageManagerUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.tistory.deque.translationtranslater;
+package com.tistory.deque.translationtranslater.Controler;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,6 +7,9 @@ import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tistory.deque.translationtranslater.Model.DB.DBOpenHelper;
+import com.tistory.deque.translationtranslater.Model.ExcludingMember;
 
 import java.util.ArrayList;
 
@@ -45,10 +48,9 @@ public class ExcludeStringTranslate {
     this.translatedText = translatedText;
     unHashingText();
     translatedTextView.setText(this.translatedText);
-    return;
   }
 
-  public void doHashingText() {
+  private void doHashingText() {
     tableIndex = 1;
     String sql = "SELECT * FROM " + dbHelper.TABLE_NAME + ";";
     Cursor results = null;
@@ -75,8 +77,13 @@ public class ExcludeStringTranslate {
     Log.d(tag, "Cursor close");
   }
 
-  public void unHashingText() {
-    return;
+  private void unHashingText() {
+    Log.d(tag, "do unHasingText");
+    for(ExcludingMember excludingMember : excludingTable){
+      String excludingMemberKey = excludingMember.getKey();
+      translatedText = translatedText.replaceAll("" + excludingMemberKey, excludingMember.getValue());
+    }
+    Log.d(tag, "end unHashingText");
   }
 
   public void translate() {

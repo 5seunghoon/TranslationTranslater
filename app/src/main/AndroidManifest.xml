@@ -25,7 +25,7 @@
         android:resource="@xml/file_paths" />
     </provider>
 
-    <activity android:name=".MainActivity">
+    <activity android:name=".Activity.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
@@ -39,9 +39,9 @@
         <data android:mimeType="text/plain" />
       </intent-filter>
     </activity>
-    <activity android:name=".OCRTaskActivity" />
-    <activity android:name=".WordBookActivity"/>
-    <activity android:name=".HistoryActivity" />
+    <activity android:name=".Activity.OCRTaskActivity" />
+    <activity android:name=".Activity.WordBookActivity"/>
+    <activity android:name=".Activity.HistoryActivity" />
   </application>
 
 </manifest>

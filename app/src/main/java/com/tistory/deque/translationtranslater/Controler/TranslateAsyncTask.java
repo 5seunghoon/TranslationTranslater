@@ -1,4 +1,4 @@
-package com.tistory.deque.translationtranslater;
+package com.tistory.deque.translationtranslater.Controler;
 
 /**
  * Created by Oh seunghoon on 2018-03-14.

@@ -1,4 +1,4 @@
-package com.tistory.deque.translationtranslater;
+package com.tistory.deque.translationtranslater.Activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,13 +21,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.tistory.deque.translationtranslater.Model.DB.DBOpenHelper;
+import com.tistory.deque.translationtranslater.Controler.ExcludeStringTranslate;
+import com.tistory.deque.translationtranslater.Util.Permission;
+import com.tistory.deque.translationtranslater.R;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.tistory.deque.translationtranslater.WordBookActivity;
 
 public class MainActivity extends AppCompatActivity {
   public enum viewState { NORMAL, EXTAND }
@@ -101,8 +104,6 @@ public class MainActivity extends AppCompatActivity {
     sharedToMe(onIntent);
 
     inputEditText.clearFocus(); //when create activity, we must hide keyboard
-
-    dbInsertTest();
   }
 
   private void setClickListener() {
@@ -161,16 +162,6 @@ public class MainActivity extends AppCompatActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.actionbar_actions, menu); // 액션바에 actionbar_actions를 붙임
     return super.onCreateOptionsMenu(menu);
-  }
-
-  private void dbInsertTest() {
-    dbHelper.insertWord("PYTHON", "파이썬");
-    dbHelper.insertWord("AJAX", "에이젝스");
-
-    dbHelper.insertHistory("HELLO THIS IS FOR TEST1!!","THIS IS FOR TEST 1AGAIN!!");
-    dbHelper.insertHistory("HELLO THIS IS FOR TEST2!!","THIS IS FOR TEST 2?!");
-    dbHelper.insertHistory("HELLO THIS IS FOR TEST3!!","THIS IS FOR TEST 3AGAIN!!");
-    dbHelper.insertHistory("HELLO THIS IS FOR TEST4!!","THIS IS FOR TEST 4AGAIN!!");
   }
 
   @Override
@@ -374,8 +365,6 @@ public class MainActivity extends AppCompatActivity {
       captureCamera();
       Log.d(TAG, "capture camera func end");
     }
-
-    return;
   }
 
   public void doGallery() {
@@ -384,8 +373,6 @@ public class MainActivity extends AppCompatActivity {
       getAlbum();
       Log.d(TAG, "get album func end");
     }
-
-    return;
   }
   private void captureCamera() {
     String state = Environment.getExternalStorageState();

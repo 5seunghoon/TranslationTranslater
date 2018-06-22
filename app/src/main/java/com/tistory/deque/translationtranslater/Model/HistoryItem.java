@@ -1,4 +1,4 @@
-package com.tistory.deque.translationtranslater;
+package com.tistory.deque.translationtranslater.Model;
 
 /**
  * Created by jkuot on 2018-06-22.
