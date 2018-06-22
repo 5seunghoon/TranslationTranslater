@@ -5,17 +5,28 @@ package com.tistory.deque.translationtranslater.Model;
  */
 
 public class HistoryItem {
+    private int id;    
     private String OriginalPhrase;
     private String TranslatedPhrase;
+    private String RegisterTime;
 
-    public HistoryItem(String OriginalPhrase, String TranslatedPhrase){
+    public HistoryItem(int id, String OriginalPhrase, String TranslatedPhrase, String RegisterTime){
+        this.id = id;
         this.OriginalPhrase = OriginalPhrase;
         this.TranslatedPhrase = TranslatedPhrase;
+        this.RegisterTime = RegisterTime;
     }
     public String getOriginalPhrase(){
         return OriginalPhrase;
     }
     public String getTranslatedPhrase(){
         return TranslatedPhrase;
+    }
+    public String getRegisterTime(){
+        return RegisterTime;
+    }
+
+    public int getId() {
+        return id;
     }
 }

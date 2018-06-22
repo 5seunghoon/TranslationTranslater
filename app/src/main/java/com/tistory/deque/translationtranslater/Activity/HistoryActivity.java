@@ -1,13 +1,11 @@
 package com.tistory.deque.translationtranslater.Activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 
 import java.util.ArrayList;
 
@@ -63,11 +61,28 @@ public class HistoryActivity extends Activity{
     }
 
     public void historyDelete(int position) {
+        int deleteItemId = mHistoryArray.get(position).getId();
         mHistoryArray.remove(position);
         mHistoryAdapter.notifyItemRemoved(position);
         mHistoryAdapter.notifyItemRangeChanged(0,mHistoryArray.size());
-        
 
-        //db.deleteHistory();
+        dbOpenHelper.deleteHistory(deleteItemId);
+    }
+
+    public void historyShare(int position) {
+
+        String translatedString = mHistoryArray.get(position).getTranslatedPhrase();
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.app_name));
+        shareIntent.putExtra(Intent.EXTRA_TEXT,translatedString + "\n - translated by " + getString(R.string.app_name));
+        startActivity(Intent.createChooser(shareIntent, "번역 결과 공유하기"));
+
+    }
+
+    public void expandPhraseView(int position) {
+
+        mHistoryRecyclerView.
     }
 }

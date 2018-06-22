@@ -42,15 +42,35 @@
                     android:layout_height="1px"
                     android:background="#666666" />
 
-                <TextView
-                    android:id="@+id/TranslatedPhrase"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text=" TextView"
-                    android:textColor="#777777"
-                    android:textSize="11dp" />
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/TranslatedPhrase"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text=" TextView"
+                        android:gravity="center_vertical"
+                        android:textColor="#777777"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/RegisterTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0"
+                        android:text="TextView"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:textSize="10dp"
+                        />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
