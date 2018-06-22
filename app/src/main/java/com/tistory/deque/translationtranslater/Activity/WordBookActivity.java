@@ -46,6 +46,9 @@ public class WordBookActivity extends AppCompatActivity {
     wordValue = findViewById(R.id.word_value);
 
     wordList = (ListView)findViewById(R.id.word_list);
+
+    setTitle("단어장 편집");
+
     updateView();
 
     addButton.setOnClickListener(new View.OnClickListener() {

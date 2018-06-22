@@ -1,26 +1,23 @@
 package com.tistory.deque.translationtranslater.Activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-
-import java.util.ArrayList;
 
 import com.tistory.deque.translationtranslater.Activity.Adapter.HistoryAdapter;
 import com.tistory.deque.translationtranslater.Model.DB.DBOpenHelper;
 import com.tistory.deque.translationtranslater.Model.HistoryItem;
 import com.tistory.deque.translationtranslater.R;
 
+import java.util.ArrayList;
+
 /**
  * Created by jkuot on 2018-06-22.
  */
 
-public class HistoryActivity extends Activity{
+public class HistoryActivity extends AppCompatActivity {
 
     private RecyclerView mHistoryRecyclerView;
     private HistoryAdapter mHistoryAdapter;
@@ -39,6 +36,8 @@ public class HistoryActivity extends Activity{
                 DBOpenHelper.TABLE_HISTORY,
                 null, DBOpenHelper.dbVersion
         );
+        setTitle("번역 히스토리");
+
         dbOpenHelper.dbOpen();
         init();
         dataInit();
