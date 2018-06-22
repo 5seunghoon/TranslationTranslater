@@ -33,7 +33,7 @@ public class ExcludeStringTranslate {
 
   private String tag = "stringExclusionTranslateClass";
 
-  ExcludeStringTranslate(Context context, DBOpenHelper dbHelpler, TextView translatedTextView) {
+  public ExcludeStringTranslate(Context context, DBOpenHelper dbHelpler, TextView translatedTextView) {
     this.context = context;
     this.dbHelper = dbHelpler;
     this.translatedTextView = translatedTextView;

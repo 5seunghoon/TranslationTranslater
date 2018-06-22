@@ -128,8 +128,8 @@ public class WordBookActivity extends AppCompatActivity {
       addModeBtn.setVisibility(View.VISIBLE);
     } else {
       addBtn.setVisibility(View.VISIBLE);
-      editBtn.setVisibility(View.GONE);
-      deleteBtn.setVisibility(View.GONE);
+      editBtn.setVisibility(View.INVISIBLE);
+      deleteBtn.setVisibility(View.INVISIBLE);
       addModeBtn.setVisibility(View.GONE);
     }
   }

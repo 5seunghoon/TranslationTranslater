@@ -20,57 +20,65 @@
       android:background="@android:color/white"
       android:orientation="vertical">
 
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:orientation="vertical">
+
+          <EditText
+            android:id="@+id/word_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="from word"
+            android:inputType="textPersonName" />
+
+          <EditText
+            android:id="@+id/word_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="to word"
+            android:inputType="textPersonName" />
+
+        </LinearLayout>
+
+        <Button
+          android:id="@+id/add_mode_btn"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:background="@drawable/ic_add_color_primary_24dp" />
+
+        <Button
+          android:id="@+id/add_btn"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:background="@drawable/ic_add_color_primary_24dp" />
+
+        <Button
+          android:id="@+id/delete_btn"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:background="@drawable/ic_delete_forever_black_24dp" />
+
+        <Button
+          android:id="@+id/edit_btn"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:background="@drawable/ic_edit_black_24dp" />
+      </LinearLayout>
+
       <ListView
         android:id="@+id/word_list"
         android:layout_width="match_parent"
         android:layout_height="300dp"></ListView>
-
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <EditText
-          android:id="@+id/word_key"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:ems="10"
-          android:inputType="textPersonName"
-          android:hint="from word"
-          />
-
-        <EditText
-          android:id="@+id/word_value"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:ems="10"
-          android:inputType="textPersonName"
-          android:hint="to word"
-          />
-        <Button
-          android:id="@+id/add_btn"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="Add Word" />
-
-        <Button
-          android:id="@+id/edit_btn"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="Edit Word" />
-
-        <Button
-          android:id="@+id/delete_btn"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="Delete Word" />
-
-        <Button
-          android:id="@+id/add_mode_btn"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="Add Mode" />
-      </LinearLayout>
     </LinearLayout>
   </LinearLayout>
 
