@@ -5,10 +5,15 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import com.tistory.deque.translationtranslater.Activity.Adapter.HistoryAdapter;
+import com.tistory.deque.translationtranslater.Model.DB.DBOpenHelper;
+import com.tistory.deque.translationtranslater.Model.HistoryItem;
 import com.tistory.deque.translationtranslater.R;
 
 /**
@@ -22,7 +27,7 @@ public class HistoryActivity extends Activity{
     private ArrayList<HistoryItem> mHistoryArray;
     private LinearLayoutManager mLayoutManger;
     private DBOpenHelper dbOpenHelper;
-    private int dbVersion = 1;
+
 
     @Override
     protected  void onCreate(Bundle savedInstanceState){
@@ -32,15 +37,17 @@ public class HistoryActivity extends Activity{
         dbOpenHelper = DBOpenHelper.getDbOpenHelper(
                 getApplicationContext(),
                 DBOpenHelper.TABLE_HISTORY,
-                null, dbVersion
+                null, DBOpenHelper.dbVersion
         );
         dbOpenHelper.dbOpen();
         init();
         dataInit();
+
+
     }
 
     private void init() {
-        mHistoryRecyclerView = (RecyclerView) findViewById(R.id.history_recyclerView);
+        mHistoryRecyclerView = findViewById(R.id.history_recyclerView);
     }
 
     private void dataInit() {
@@ -49,10 +56,18 @@ public class HistoryActivity extends Activity{
         mLayoutManger = new LinearLayoutManager(HistoryActivity.this);
         mLayoutManger.setOrientation(LinearLayoutManager.VERTICAL);
 
-        mHistoryAdapter = new HistoryAdapter(mHistoryArray);
+        mHistoryAdapter = new HistoryAdapter(mHistoryArray, this);
         mHistoryRecyclerView.setAdapter(mHistoryAdapter);
         mHistoryRecyclerView.setLayoutManager(mLayoutManger);
         mHistoryRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
+    public void historyDelete(int position) {
+        mHistoryArray.remove(position);
+        mHistoryAdapter.notifyItemRemoved(position);
+        mHistoryAdapter.notifyItemRangeChanged(0,mHistoryArray.size());
+        
+
+        //db.deleteHistory();
+    }
 }

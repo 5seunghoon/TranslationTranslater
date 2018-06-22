@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
   private String preEditString;
 
-  private int dbVersion = 1;
   protected DBOpenHelper dbHelper;
   //protected SQLiteDatabase db;
   Uri imageURI, cropSourceURI, cropEndURI;
@@ -93,9 +92,9 @@ public class MainActivity extends AppCompatActivity {
     imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
     setTitle(R.string.app_name);
+    dbOpen();
 
     permission.checkPermissions();
-    dbOpen();
 
     viewstate = viewState.NORMAL;
     backPressedTime = 0;
@@ -187,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
     dbHelper = DBOpenHelper.getDbOpenHelper(
       getApplicationContext(),
       DBOpenHelper.TABLE_NAME,
-      null, dbVersion
+      null, DBOpenHelper.dbVersion
     );
     dbHelper.dbOpen();
   }
@@ -206,6 +205,16 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  public void dbInsertTest(){
+    dbHelper.insertHistory("Hello, This is your Home!","안녕, 여긴 당신의 집!");
+    dbHelper.insertHistory("An Hyeon Mo gone","잘 가 안현모");
+    dbHelper.insertHistory("Hello, This is your Home!","안녕, 여긴 당신의 집!");
+    dbHelper.insertHistory("An hyeon Mo gone","잘 가 안현모");
+    dbHelper.insertHistory("Hello, This is your Home!","안녕, 여긴 당신의 집!");
+    dbHelper.insertHistory("An hyeon Mo gone","잘 가 안현모");
+    dbHelper.insertHistory("Hello, This is your Home!","안녕, 여긴 당신의 집!");
+    dbHelper.insertHistory("An hyeon Mo gone","잘 가 안현모");
+  }
   public void startOcrTaskActivity(Uri resultImageUri) {
     Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), OCRTaskActivity.class);
     ocrTaskActivityIntent.putExtra("IMAGE_URI", resultImageUri);

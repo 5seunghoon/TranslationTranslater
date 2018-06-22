@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.tistory.deque.translationtranslater.Model.ExcludingMember;
+import com.tistory.deque.translationtranslater.Model.HistoryItem;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,8 @@ public class DBOpenHelper extends SQLiteOpenHelper{
   public static final String TRANSLATED_WORD_KEY = "TRANSLATED_WORD";
   public static final String ORIGINAL_PASSAGE = "ORIGINAL_PASSAGE";
   public static final String TRANSLATED_PASSAGE = "TRANSLATED_PASSAGE";
+
+  public static int dbVersion = 2;
 
   private DBOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
     super(context, name, factory, version);
@@ -68,6 +71,7 @@ public class DBOpenHelper extends SQLiteOpenHelper{
   }
 
   public void createTable(SQLiteDatabase db){
+    Log.d(TAG, "CREATE TABLE");
     String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
       "_ID INTEGER PRIMARY KEY AUTOINCREMENT, "+
       ORIGINAL_WORD_KEY + " TEXT" +
