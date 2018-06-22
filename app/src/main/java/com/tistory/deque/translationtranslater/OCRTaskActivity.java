@@ -8,14 +8,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class OCRTaskActivity extends AppCompatActivity {
 
   private ImageView imageView;
-  private TextView textView;
+  private TextView OCRTextView;
   private static Button okButton, cancleButton;
+  private ProgressBar OCRWaitProgressBar;
 
   private Toast backToast;
   private long backPressedTime;
@@ -30,16 +32,17 @@ public class OCRTaskActivity extends AppCompatActivity {
     setContentView(R.layout.activity_ocr_task);
     Log.d(TAG, "start Activity");
 
+    OCRWaitProgressBar = findViewById(R.id.OCRWaitProgressBar);
     imageView = findViewById(R.id.imageView);
-    textView = findViewById(R.id.editText);
+    OCRTextView = findViewById(R.id.OCRtextView);
     okButton = findViewById(R.id.okButton);
     cancleButton = findViewById(R.id.cancleButton);
-    okButton.setVisibility(View.INVISIBLE);
-    cancleButton.setVisibility(View.INVISIBLE);
 
     setTitle(R.string.ocrTitle);
 
+    preOCR();
     ocr();
+
   }
 
   @Override
@@ -53,25 +56,25 @@ public class OCRTaskActivity extends AppCompatActivity {
       backToast.show();
     }
   }
+
   private void ocr(){
-    textView.setText(loadingText);
+    OCRTextView.setText(loadingText);
     Log.d(TAG, "getBase64Encoded func");
     Intent intent = getIntent();
     resultImageUri = (Uri) intent.getExtras().get("IMAGE_URI");
     Log.d(TAG, "image uri : " + resultImageUri);
     imageView.setImageURI(resultImageUri);
 
-    OCRTask _OCRTask = new OCRTask(getApplicationContext(), okButton, cancleButton);
+    OCRTask _OCRTask = new OCRTask(getApplicationContext(), this);
     Log.d(TAG, "OCRTask success make");
 
     _OCRTask.setmImageURI(resultImageUri);
-    _OCRTask.setTextView(textView);
     _OCRTask.setImageView(imageView);
     _OCRTask.RUN();
   }
   public void okButtonClk(View view){
     Intent resultIntent = new Intent();
-    resultIntent.putExtra("OCR_STRING", textView.getText().toString());
+    resultIntent.putExtra("OCR_STRING", OCRTextView.getText().toString());
     setResult(RESULT_OK, resultIntent);
     finish();
   }
@@ -80,6 +83,20 @@ public class OCRTaskActivity extends AppCompatActivity {
     resultIntent.putExtra("OCR_STRING", "");
     setResult(RESULT_CANCELED, resultIntent);
     finish();
+  }
+
+  public void preOCR(){
+    okButton.setVisibility(View.INVISIBLE);
+    cancleButton.setVisibility(View.INVISIBLE);
+    OCRTextView.setVisibility(View.GONE);
+  }
+  public void successOCR(String result){
+    okButton.setVisibility(View.VISIBLE);
+    cancleButton.setVisibility(View.VISIBLE);
+
+    OCRWaitProgressBar.setVisibility(View.GONE);
+    OCRTextView.setText(result);
+    OCRTextView.setVisibility(View.VISIBLE);
   }
 
 }

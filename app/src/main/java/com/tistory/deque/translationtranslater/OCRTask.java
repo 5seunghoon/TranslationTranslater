@@ -6,10 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -50,26 +47,21 @@ public class OCRTask {
   private static final int MAX_DIMENSION = 1200;
 
   private Context context;
-  private Button okButton, cancleButton;
   private Uri mImageURI;
-  private TextView mImageDetails;
   private ImageView mMainImage;
+
+  public OCRTaskActivity ocrTaskActivity;
   
   static private String tag = "ocrTaskClass";
 
-  public OCRTask(Context context, Button okButton, Button cancleButton) {
+  public OCRTask(Context context, OCRTaskActivity ocrTaskActivity) {
     this.context = context;
-    this.okButton = okButton;
-    this.cancleButton = cancleButton;
+    this.ocrTaskActivity = ocrTaskActivity;
   }
 
-  public void setmImageURI(Uri imageUri){
+  public void setmImageURI(Uri imageUri) {
     this.mImageURI = imageUri;
     Log.d(tag, "image uri set success");
-  }
-  public void setTextView(TextView textView){
-    this.mImageDetails = textView;
-    Log.d(tag, "text view set success");
   }
   public void setImageView(ImageView imageView){
     this.mMainImage = imageView;
@@ -149,10 +141,8 @@ public class OCRTask {
     try {
       AsyncTask<Object, Void, String> textDetectionTask =
         new TextDetectionTask(
-          mImageDetails,
-          prepareAnnotationRequest(bitmap),
-          okButton,
-          cancleButton
+                prepareAnnotationRequest(bitmap),
+                ocrTaskActivity
         );
 
       textDetectionTask.execute();
@@ -242,44 +232,7 @@ public class OCRTask {
   }
 
 
-
-  private static class TextDetectionTask extends AsyncTask<Object, Void, String> {
-    private TextView mImageDetails;
-    private Vision.Images.Annotate mRequest;
-    private Button okButton, cancleButton;
-
-    TextDetectionTask(TextView mImageDetails, Vision.Images.Annotate annotate, Button okButton, Button cancleButton) {
-      this.mImageDetails = mImageDetails;
-      this.okButton = okButton;
-      this.cancleButton = cancleButton;
-      mRequest = annotate;
-    }
-
-    @Override
-    protected String doInBackground(Object... params) {
-      try {
-        Log.d(tag, "created Cloud Vision request object, sending request");
-        BatchAnnotateImagesResponse response = mRequest.execute();
-        return convertResponseToString(response);
-
-      } catch (GoogleJsonResponseException e) {
-        Log.d(tag, "failed to make API request because " + e.getContent());
-      } catch (IOException e) {
-        Log.d(tag, "failed to make API request because of other IOException " +
-          e.getMessage());
-      }
-      return "Cloud Vision API request failed. Check logs for details.";
-    }
-
-    protected void onPostExecute(String result) {
-      Log.d(tag, "GET message from google : " +  result);
-      mImageDetails.setText(result);
-      okButton.setVisibility(View.VISIBLE);
-      cancleButton.setVisibility(View.VISIBLE);
-    }
-  }
-
-  private static String convertResponseToString(BatchAnnotateImagesResponse response) {
+  public static String convertResponseToString(BatchAnnotateImagesResponse response) {
     StringBuilder message = new StringBuilder("");
 
     List<EntityAnnotation> labels = response.getResponses().get(0).getTextAnnotations();
@@ -291,5 +244,38 @@ public class OCRTask {
 
     return message.toString();
   }
+}
 
+class TextDetectionTask extends AsyncTask<Object, Void, String> {
+  private final static String tag = "TextDetectionTaskTAG";
+
+  private Vision.Images.Annotate mRequest;
+  private OCRTaskActivity ocrTaskActivity;
+
+  TextDetectionTask(Vision.Images.Annotate annotate, OCRTaskActivity ocrTaskActivity) {
+    mRequest = annotate;
+    this.ocrTaskActivity = ocrTaskActivity;
+  }
+
+  @Override
+  protected String doInBackground(Object... params) {
+    try {
+      Log.d(tag, "created Cloud Vision request object, sending request");
+      BatchAnnotateImagesResponse response = mRequest.execute();
+      return OCRTask.convertResponseToString(response);
+
+    } catch (GoogleJsonResponseException e) {
+      Log.d(tag, "failed to make API request because " + e.getContent());
+    } catch (IOException e) {
+      Log.d(tag, "failed to make API request because of other IOException " +
+              e.getMessage());
+    }
+    return "Cloud Vision API request failed. Check logs for details.";
+  }
+
+  protected void onPostExecute(String result) {
+    Log.d(tag, "GET message from google : " +  result);
+    ocrTaskActivity.successOCR(result);
+    ocrTaskActivity = null;
+  }
 }
