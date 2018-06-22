@@ -51,16 +51,16 @@
         </LinearLayout>
 
         <Button
-          android:id="@+id/add_mode_btn"
+          android:id="@+id/add_btn"
           android:layout_width="48dp"
           android:layout_height="48dp"
           android:background="@drawable/ic_add_color_primary_24dp" />
 
         <Button
-          android:id="@+id/add_btn"
+          android:id="@+id/edit_btn"
           android:layout_width="48dp"
           android:layout_height="48dp"
-          android:background="@drawable/ic_add_color_primary_24dp" />
+          android:background="@drawable/ic_edit_black_24dp" />
 
         <Button
           android:id="@+id/delete_btn"
@@ -69,10 +69,10 @@
           android:background="@drawable/ic_delete_forever_black_24dp" />
 
         <Button
-          android:id="@+id/edit_btn"
+          android:id="@+id/add_mode_btn"
           android:layout_width="48dp"
           android:layout_height="48dp"
-          android:background="@drawable/ic_edit_black_24dp" />
+          android:background="@drawable/ic_arrow_back_black_24dp" />
       </LinearLayout>
 
       <ListView
