@@ -8,10 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.tistory.deque.translationtranslater.Model.DB.DBOpenHelper;
+import com.tistory.deque.translationtranslater.Model.DB.*;
 import com.tistory.deque.translationtranslater.Model.ExcludingMember;
 import com.tistory.deque.translationtranslater.R;
-import com.tistory.deque.translationtranslater.Activity.Adapter.WordBookAdapter;
+import com.tistory.deque.translationtranslater.Activity.Adapter.*;
 
 import java.util.ArrayList;
 
