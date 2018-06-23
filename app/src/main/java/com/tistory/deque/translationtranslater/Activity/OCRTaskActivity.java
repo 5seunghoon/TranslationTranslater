@@ -53,7 +53,7 @@ public class OCRTaskActivity extends AppCompatActivity {
   }
 
   @Override
-  public void onBackPressed(){
+  public void onBackPressed() {
     if (System.currentTimeMillis() - backPressedTime < 2000) {
       backSnackbar.dismiss();
       finish();
@@ -64,7 +64,7 @@ public class OCRTaskActivity extends AppCompatActivity {
     }
   }
 
-  private void ocr(){
+  private void ocr() {
     OCRTextView.setText(loadingText);
     Log.d(TAG, "getBase64Encoded func");
     Intent intent = getIntent();
@@ -79,25 +79,28 @@ public class OCRTaskActivity extends AppCompatActivity {
     _OCRTask.setImageView(imageView);
     _OCRTask.RUN();
   }
-  public void okButtonClk(View view){
+
+  public void okButtonClk(View view) {
     Intent resultIntent = new Intent();
     resultIntent.putExtra("OCR_STRING", OCRTextView.getText().toString());
     setResult(RESULT_OK, resultIntent);
     finish();
   }
-  public void cancleButtonClk(View veiw){
+
+  public void cancleButtonClk(View veiw) {
     Intent resultIntent = new Intent();
     resultIntent.putExtra("OCR_STRING", "");
     setResult(RESULT_CANCELED, resultIntent);
     finish();
   }
 
-  public void preOCR(){
+  public void preOCR() {
     okButton.setVisibility(View.INVISIBLE);
     cancleButton.setVisibility(View.INVISIBLE);
     OCRTextView.setVisibility(View.GONE);
   }
-  public void successOCR(String result){
+
+  public void successOCR(String result) {
     okButton.setVisibility(View.VISIBLE);
     cancleButton.setVisibility(View.VISIBLE);
 

@@ -43,12 +43,12 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
 
   @Override
   protected String doInBackground(String... strings) {
-    try{
+    try {
       StringBuffer response = getHttpResponseFromPapagoAPI(strings[0]);
       String translatedText = jsonToText(new JSONObject(response.toString()));
       setResultString(translatedText);
       Log.d(TAG, "Translate success");
-    } catch(Exception e){
+    } catch (Exception e) {
       Log.d(TAG, "Translate error");
       setResultString("Translate Error");
     }
@@ -72,7 +72,7 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
       Log.d(TAG, "Encoded text : " + text);
       String apiURL = "https://openapi.naver.com/v1/papago/n2mt";
       URL url = new URL(apiURL);
-      HttpURLConnection con = (HttpURLConnection)url.openConnection();
+      HttpURLConnection con = (HttpURLConnection) url.openConnection();
       con.setRequestMethod("POST");
       con.setRequestProperty("X-Naver-Client-Id", getClientId());
       con.setRequestProperty("X-Naver-Client-Secret", getClientSecret());
@@ -92,7 +92,7 @@ public class TranslateAsyncTask extends AsyncTask<String, String, String> {
       Log.d(TAG, "Data Output Stream close");
       int responseCode = con.getResponseCode();
       BufferedReader br;
-      if (responseCode==200) { // 정상 호출
+      if (responseCode == 200) { // 정상 호출
         br = new BufferedReader(new InputStreamReader(con.getInputStream()));
         Log.d(TAG, "response code : 200, success");
       } else {  // 에러 발생

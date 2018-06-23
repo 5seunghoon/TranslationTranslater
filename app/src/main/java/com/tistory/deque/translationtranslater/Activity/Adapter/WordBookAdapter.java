@@ -29,8 +29,8 @@ public class WordBookAdapter extends ArrayAdapter<ExcludingMember> {
       convertView = LayoutInflater.from(getContext()).inflate(R.layout.word_book_item, parent, false);
     }
 
-    TextView origin = (TextView)convertView.findViewById(R.id.word_book_key);
-    TextView value = (TextView)convertView.findViewById(R.id.word_book_value);
+    TextView origin = (TextView) convertView.findViewById(R.id.word_book_key);
+    TextView value = (TextView) convertView.findViewById(R.id.word_book_value);
 
     origin.setText(member.getOrigin());
     value.setText(member.getValue());

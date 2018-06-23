@@ -54,7 +54,7 @@ public class OCRTask {
   private ImageView mMainImage;
 
   public OCRTaskActivity ocrTaskActivity;
-  
+
   static private String tag = "ocrTaskClass";
 
   public OCRTask(Context context, OCRTaskActivity ocrTaskActivity) {
@@ -66,18 +66,19 @@ public class OCRTask {
     this.mImageURI = imageUri;
     Log.d(tag, "image uri set success");
   }
-  public void setImageView(ImageView imageView){
+
+  public void setImageView(ImageView imageView) {
     this.mMainImage = imageView;
     Log.d(tag, "image view set success");
   }
 
-  public void RUN(){
+  public void RUN() {
     Log.d(tag, "RUN OCR TASK");
     VisionAPI();
     return;
   }
 
-  private void VisionAPI(){
+  private void VisionAPI() {
     /**
      * 1. uri로부터 이미지 들고와서 bitmap을 만든 다음 callCloudVision() 콜 (사이즈가 크면 리사이징 먼저)
      * 2. textDetectionTask를 만들고, 그 task를 execute. (이 task는 스래드임.)
@@ -115,6 +116,7 @@ public class OCRTask {
       Toast.makeText(context, context.getResources().getString(R.string.image_picker_error), Toast.LENGTH_LONG).show();
     }
   }
+
   private Bitmap scaleBitmapDown(Bitmap bitmap, int maxDimension) {
     Log.d(tag, "scale bitmap down");
 
@@ -144,8 +146,8 @@ public class OCRTask {
     try {
       AsyncTask<Object, Void, String> textDetectionTask =
         new TextDetectionTask(
-                prepareAnnotationRequest(bitmap),
-                ocrTaskActivity
+          prepareAnnotationRequest(bitmap),
+          ocrTaskActivity
         );
 
       textDetectionTask.execute();
@@ -161,7 +163,7 @@ public class OCRTask {
      * make request.
      * put image, type, packagename.. etc
      */
-    Log.d(tag,"prepareAnnotationRequest func");
+    Log.d(tag, "prepareAnnotationRequest func");
     HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
     JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
 
@@ -271,13 +273,13 @@ class TextDetectionTask extends AsyncTask<Object, Void, String> {
       Log.d(tag, "failed to make API request because " + e.getContent());
     } catch (IOException e) {
       Log.d(tag, "failed to make API request because of other IOException " +
-              e.getMessage());
+        e.getMessage());
     }
     return "Cloud Vision API request failed. Check logs for details.";
   }
 
   protected void onPostExecute(String result) {
-    Log.d(tag, "GET message from google : " +  result);
+    Log.d(tag, "GET message from google : " + result);
     ocrTaskActivity.successOCR(result);
     ocrTaskActivity = null;
   }

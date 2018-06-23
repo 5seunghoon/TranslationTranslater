@@ -46,7 +46,7 @@ public class WordBookActivity extends AppCompatActivity {
     wordKey = findViewById(R.id.word_key);
     wordValue = findViewById(R.id.word_value);
 
-    wordList = (ListView)findViewById(R.id.word_list);
+    wordList = (ListView) findViewById(R.id.word_list);
 
     setTitle("단어장 편집");
 
@@ -56,7 +56,7 @@ public class WordBookActivity extends AppCompatActivity {
       public void onClick(View v) {
         String key = wordKey.getText().toString();
         String value = wordValue.getText().toString();
-        if (key.length() == 0 || value.length() ==0) {
+        if (key.length() == 0 || value.length() == 0) {
           return;
         }
         addWordBook(key, value);

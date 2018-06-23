@@ -4,6 +4,7 @@ package com.tistory.deque.translationtranslater.Util;
  * Created by HELLOEARTH on 2018-03-31.
  * Provides utility logic for getting the app's SHA1 signature. Used with restricted API keys.
  */
+
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;

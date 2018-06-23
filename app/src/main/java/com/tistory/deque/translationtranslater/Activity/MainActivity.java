@@ -35,7 +35,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-  public enum viewState { NORMAL, EXTAND }
+  public enum viewState {NORMAL, EXTAND}
+
   private static final int REQUEST_TAKE_PHOTO = 101;
   private static final int REQUEST_TAKE_ALBUM = 102;
   private static final int REQUEST_IMAGE_CROP = 103;
@@ -66,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
   ActionBar actionBar;
   Permission permission;
   CoordinatorLayout mainAcitivyMainLayout;
-
 
 
   @Override
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()){
+    switch (item.getItemId()) {
       case R.id.action_camera:
         doCamera();
         break;
@@ -210,24 +210,27 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  public void dbInsertTest(){
+  public void dbInsertTest() {
     dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
-            "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠");
+      "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠");
     dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
-                    "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
-                    "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
-            "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value");dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
-            "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠");
+        "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
+        "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
+      "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value");
+    dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
+      "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠");
     dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
-                    "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
-                    "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
-            "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value");dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
-            "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠");
+        "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
+        "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
+      "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value");
+    dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
+      "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠");
     dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
-                    "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
-                    "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
-            "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value");
+        "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
+        "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
+      "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value");
   }
+
   public void startOcrTaskActivity(Uri resultImageUri) {
     Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), OCRTaskActivity.class);
     ocrTaskActivityIntent.putExtra("IMAGE_URI", resultImageUri);
@@ -235,12 +238,13 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void clickFloatingActionButton(View view) {
-    if(viewstate == viewState.NORMAL){
+    if (viewstate == viewState.NORMAL) {
       doNormalStateToExtandState();
-    } else if(viewstate == viewState.EXTAND) {
+    } else if (viewstate == viewState.EXTAND) {
       doExtandStateToNormalState();
     }
   }
+
   public void doNormalStateToExtandState() {
     preEditString = translateTextView.getText().toString();
     viewstate = viewState.EXTAND;
@@ -250,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
     translateTextView.setFocusableInTouchMode(true);
     translateTextView.requestFocus();
   }
+
   public void doExtandStateToNormalState() {
     viewstate = viewState.NORMAL;
     originalTextAndButtonLayout.setVisibility(View.VISIBLE);
@@ -263,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
     Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
     startActivity(intent);
   }
+
   public void doWordbook() {
     Intent intent = new Intent(this, WordBookActivity.class);
 
@@ -283,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
    * 3-2. "com.android.camera.action.CROP"액션, 인텐트에 output로 저장될 URI를 지정해준 뒤 intent startActivityForResult
    * 3-3. galleryAddPic()이 호출되면서 미디어 스캔을 실시
    * 4. 그 URI를 들고 ocrTaskActivity를 start
-   *
+   * <p>
    * 갤러리 버튼을 클릭했을 때,
    * 1. 권한 체크
    * 2. Intent.ACTION_PICK의 액션과 image를 타입으로 지정해주고 startActivityForResult
@@ -296,8 +302,8 @@ public class MainActivity extends AppCompatActivity {
     super.onActivityResult(requestCode, resultCode, data);
     switch (requestCode) {
       case REQUEST_TAKE_PHOTO:
-        if(resultCode == Activity.RESULT_OK) {
-          try{
+        if (resultCode == Activity.RESULT_OK) {
+          try {
             Log.d(TAG, "REQUEST TAKE PHOTO OK");
             File albumFile = null;
             albumFile = createImageFile();
@@ -315,29 +321,29 @@ public class MainActivity extends AppCompatActivity {
         break;
 
       case REQUEST_TAKE_ALBUM:
-        if(resultCode == Activity.RESULT_OK) {
-          if(data.getData() != null) {
-            try{
+        if (resultCode == Activity.RESULT_OK) {
+          if (data.getData() != null) {
+            try {
               File albumFile = null;
               albumFile = createImageFile();
               cropSourceURI = data.getData();
               cropEndURI = Uri.fromFile(albumFile);
               cropImage();
-            } catch (Exception e){
+            } catch (Exception e) {
               Log.e(TAG, "REQUEST TAKE ALBUM" + e.toString());
             }
           }
         }
         break;
       case REQUEST_IMAGE_CROP:
-        if(resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
           resizingImage();
           galleryAddPic();
           startOcrTaskActivity(cropEndURI);
         }
         break;
       case REQUEST_OCR_STRING:
-        if(resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
           inputEditText.setText(data.getStringExtra("OCR_STRING"));
         }
         break;
@@ -370,20 +376,20 @@ public class MainActivity extends AppCompatActivity {
     shareIntent.setAction(Intent.ACTION_SEND);
     shareIntent.setType("text/plain");
     shareIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.app_name));
-    shareIntent.putExtra(Intent.EXTRA_TEXT,translatedString + "\n - translated by " + getString(R.string.app_name));
+    shareIntent.putExtra(Intent.EXTRA_TEXT, translatedString + "\n - translated by " + getString(R.string.app_name));
     startActivity(Intent.createChooser(shareIntent, "번역 결과 공유하기"));
   }
 
-  public void clickResetButton(){
+  public void clickResetButton() {
     doReset();
   }
 
-  public void doReset(){
+  public void doReset() {
     translateTextView.setText(preEditString);
   }
 
   public void doCamera() {
-    if(permission.checkPermissions()){
+    if (permission.checkPermissions()) {
       Log.d(TAG, "check permission end");
       captureCamera();
       Log.d(TAG, "capture camera func end");
@@ -391,24 +397,25 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void doGallery() {
-    if(permission.checkPermissions()){
+    if (permission.checkPermissions()) {
       Log.d(TAG, "check permission end");
       getAlbum();
       Log.d(TAG, "get album func end");
     }
   }
+
   private void captureCamera() {
     String state = Environment.getExternalStorageState();
-    if(Environment.MEDIA_MOUNTED.equals(state)) {
+    if (Environment.MEDIA_MOUNTED.equals(state)) {
       Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
       Log.d(TAG, "intent takePictureIntent init");
 
-      if(takePictureIntent.resolveActivity(getPackageManager()) != null) {
+      if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
         Log.d(TAG, "if takePictureIntent.resolveActivity(getPackageManager()) != null");
         File photoFile = null;
         try {
           photoFile = createImageFile();
-        } catch (IOException ex){
+        } catch (IOException ex) {
           Log.e(TAG, "captureCamera Error" + ex.toString());
         }
         if (photoFile != null) {
@@ -427,6 +434,7 @@ public class MainActivity extends AppCompatActivity {
       }
     }
   }
+
   public File createImageFile() throws IOException {
     Log.d(TAG, "createImageFile func");
     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -496,7 +504,7 @@ public class MainActivity extends AppCompatActivity {
     //srcBmp = BitmapFactory.decodeFile(cropEndURI.getPath());
     try {
       srcBmp = MediaStore.Images.Media.getBitmap(getContentResolver(), cropEndURI);
-    } catch (Exception e){
+    } catch (Exception e) {
       Log.d(TAG, "bitmap load exception : " + e.toString());
       return;
     }
@@ -528,7 +536,10 @@ public class MainActivity extends AppCompatActivity {
       }
     }
   }
-  /** 이하 권한 **/
+
+  /**
+   * 이하 권한
+   **/
 
   @Override
   public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {

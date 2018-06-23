@@ -29,7 +29,7 @@ public class Permission {
   private Activity activity;
   private Context context;
 
-  public Permission(Context context, Activity activity){
+  public Permission(Context context, Activity activity) {
     this.activity = activity;
     this.context = context;
   }
@@ -49,8 +49,7 @@ public class Permission {
               }
             }
           }
-        }
-        else{
+        } else {
           showNoPermissionToastAndFinish();
         }
         return;
@@ -59,7 +58,7 @@ public class Permission {
   }
 
   public void showNoPermissionToastAndFinish() {
-    if (ActivityCompat.shouldShowRequestPermissionRationale(activity , Manifest.permission.READ_EXTERNAL_STORAGE)) {
+    if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
       permissionSnackbar.show();
     } else {
       permissionSnackbarRational.show();
@@ -84,7 +83,7 @@ public class Permission {
     return true;
   }
 
-  public void permissionSnackbarInit(View v){
+  public void permissionSnackbarInit(View v) {
     permissionSnackbar = Snackbar.make(v, "권한 요청에 동의 해주셔야 해요. 오른쪽 \'GO!\' 클릭!", Snackbar.LENGTH_LONG);
     permissionSnackbar.setAction("GO!", new View.OnClickListener() {
       @Override

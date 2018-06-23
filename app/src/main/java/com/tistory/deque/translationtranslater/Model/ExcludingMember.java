@@ -10,22 +10,20 @@ public class ExcludingMember {
   private String origin;
   private String value;
   private final static String PREDIX = "1234";
-  public static String intTo4digitString(int value){
-    if(value <= 9) {
+
+  public static String intTo4digitString(int value) {
+    if (value <= 9) {
       return PREDIX + "000" + String.valueOf(value);
-    }
-    else if(value <= 99){
+    } else if (value <= 99) {
       return PREDIX + "00" + String.valueOf(value);
-    }
-    else if(value <= 999){
+    } else if (value <= 999) {
       return PREDIX + "0" + String.valueOf(value);
-    }
-    else{
+    } else {
       return String.valueOf(value);
     }
   }
 
-  public ExcludingMember(int id, String key, String origin, String value){
+  public ExcludingMember(int id, String key, String origin, String value) {
     //ex) "0001", "PYTHON", "파이썬"
     this.id = id;
     this.key = key;
@@ -33,7 +31,7 @@ public class ExcludingMember {
     this.value = value;
   }
 
-  public ExcludingMember(String key, String origin, String value){
+  public ExcludingMember(String key, String origin, String value) {
     //ex) "0001", "PYTHON", "파이썬"
     this.key = key;
     this.origin = origin;
