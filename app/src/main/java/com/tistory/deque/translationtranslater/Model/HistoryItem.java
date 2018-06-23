@@ -9,6 +9,7 @@ public class HistoryItem {
     private String OriginalPhrase;
     private String TranslatedPhrase;
     private String RegisterTime;
+    private boolean opened = false;
 
     public HistoryItem(int id, String OriginalPhrase, String TranslatedPhrase, String RegisterTime){
         this.id = id;
@@ -28,5 +29,12 @@ public class HistoryItem {
 
     public int getId() {
         return id;
+    }
+
+    public boolean getOpened() {
+        return opened;
+    }
+    public void setOpened(boolean newState){
+        opened = newState;
     }
 }

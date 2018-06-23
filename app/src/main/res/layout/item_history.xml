@@ -7,8 +7,9 @@
     >
 
     <LinearLayout
+        android:id="@+id/history_item_main_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="100dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -19,6 +20,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/history_item_text_layout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -28,6 +30,7 @@
                     android:id="@+id/OriginalPhrase"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="3"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
@@ -52,10 +55,11 @@
                         android:id="@+id/TranslatedPhrase"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:singleLine="true"
-                        android:text=" TextView"
                         android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:text=" TextView"
                         android:textColor="#777777"
                         android:textSize="11dp" />
 
@@ -63,25 +67,25 @@
                         android:id="@+id/RegisterTime"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
                         android:layout_weight="0"
-                        android:text="TextView"
                         android:gravity="center_vertical"
                         android:singleLine="true"
-                        android:textSize="10dp"
-                        />
+                        android:text="TextView"
+                        android:textSize="10dp" />
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="40dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <Button
                     android:id="@+id/historyDelete_btn"
                     android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_height="45dp"
                     android:layout_weight="1"
                     android:background="@drawable/ic_delete_forever_black_24dp" />
 
@@ -95,11 +99,12 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="3px"
-            android:background="#666666" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="3px"
+        android:background="#666666" />
 
 </LinearLayout>
