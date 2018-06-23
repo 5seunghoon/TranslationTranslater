@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
   long backPressedTime;
   String mCurrentPhotoPath;
   viewState viewstate;
-  Toast backToast;
+  Snackbar backSnackbar;
 
   EditText inputEditText;
   Button translateButton, shareButton, resetButton;
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
   LinearLayout moreButtonLayout;
   ActionBar actionBar;
   Permission permission;
+  CoordinatorLayout mainAcitivyMainLayout;
 
 
 
@@ -78,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     translateTextView.setFocusableInTouchMode(false);
     originalTextAndButtonLayout = findViewById(R.id.originalTextAndButtonLayout);
     moreButtonLayout = findViewById(R.id.moreButtonLayout);
+    mainAcitivyMainLayout = findViewById(R.id.mainActivityMainLayout);
 
     shareButton = findViewById(R.id.shareButton);
     resetButton = findViewById(R.id.resetButton);
@@ -141,16 +145,16 @@ public class MainActivity extends AppCompatActivity {
   public void onBackPressed() {
     if (viewstate == viewState.NORMAL) {
       if (System.currentTimeMillis() - backPressedTime < 2000) {
-        backToast.cancel();
+        backSnackbar.dismiss();
         finish();
       } else {
         backPressedTime = System.currentTimeMillis();
-        backToast = Toast.makeText(
-          getApplicationContext(),
+        backSnackbar = Snackbar.make(
+          mainAcitivyMainLayout,
           "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.",
-          Toast.LENGTH_LONG
+          Snackbar.LENGTH_LONG
         );
-        backToast.show();
+        backSnackbar.show();
       }
     }
     if (viewstate == viewState.EXTAND) {

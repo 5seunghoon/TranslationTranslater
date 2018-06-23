@@ -1,18 +1,19 @@
 package com.tistory.deque.translationtranslater.Activity;
 
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
-import java.util.ArrayList;
-
- import com.tistory.deque.translationtranslater.Activity.Adapter.HistoryAdapter;
+import com.tistory.deque.translationtranslater.Activity.Adapter.HistoryAdapter;
 import com.tistory.deque.translationtranslater.Model.DB.DBOpenHelper;
 import com.tistory.deque.translationtranslater.Model.HistoryItem;
 import com.tistory.deque.translationtranslater.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by jkuot on 2018-06-22.
@@ -69,6 +70,8 @@ public class HistoryActivity extends AppCompatActivity {
         mHistoryAdapter.notifyItemRangeChanged(0,mHistoryArray.size());
 
         dbOpenHelper.deleteHistory(deleteItemId);
+
+        Snackbar.make(mHistoryRecyclerView, "히스토리 삭제 완료", Snackbar.LENGTH_LONG).show();
     }
 
     public void historyShare(int position) {

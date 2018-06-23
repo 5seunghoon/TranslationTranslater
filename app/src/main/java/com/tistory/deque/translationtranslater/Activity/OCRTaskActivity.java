@@ -3,14 +3,15 @@ package com.tistory.deque.translationtranslater.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tistory.deque.translationtranslater.Controler.OCRTask;
 import com.tistory.deque.translationtranslater.R;
@@ -21,8 +22,9 @@ public class OCRTaskActivity extends AppCompatActivity {
   private TextView OCRTextView;
   private static Button okButton, cancleButton;
   private ProgressBar OCRWaitProgressBar;
+  private LinearLayout ocrTaskMainLayout;
 
-  private Toast backToast;
+  private Snackbar backSnackbar;
   private long backPressedTime;
   private String loadingText = "";
 
@@ -34,6 +36,8 @@ public class OCRTaskActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ocr_task);
     Log.d(TAG, "start Activity");
+
+    ocrTaskMainLayout = findViewById(R.id.OCRTaskMainLayout);
 
     OCRWaitProgressBar = findViewById(R.id.OCRWaitProgressBar);
     imageView = findViewById(R.id.imageView);
@@ -51,12 +55,12 @@ public class OCRTaskActivity extends AppCompatActivity {
   @Override
   public void onBackPressed(){
     if (System.currentTimeMillis() - backPressedTime < 2000) {
-      backToast.cancel();
+      backSnackbar.dismiss();
       finish();
     } else {
       backPressedTime = System.currentTimeMillis();
-      backToast = Toast.makeText(getApplicationContext(), "\'뒤로\'버튼을 한번 더 누르시면 문자 감식이 취소됩니다.", Toast.LENGTH_LONG);
-      backToast.show();
+      backSnackbar = Snackbar.make(ocrTaskMainLayout, "\'뒤로\'버튼을 한번 더 누르시면 문자 감식이 취소됩니다.", Snackbar.LENGTH_LONG);
+      backSnackbar.show();
     }
   }
 

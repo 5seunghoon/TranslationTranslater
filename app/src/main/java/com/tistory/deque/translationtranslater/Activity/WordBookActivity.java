@@ -1,5 +1,6 @@
 package com.tistory.deque.translationtranslater.Activity;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -60,6 +61,7 @@ public class WordBookActivity extends AppCompatActivity {
         }
         addWordBook(key, value);
         clearInput();
+        Snackbar.make(v, "단어 추가 완료", Snackbar.LENGTH_LONG).show();
       }
     });
 
@@ -73,6 +75,7 @@ public class WordBookActivity extends AppCompatActivity {
         clearInput();
         updateView();
         toggleMode(false);
+        Snackbar.make(view, "단어 편집 완료", Snackbar.LENGTH_LONG).show();
       }
     });
 
@@ -82,6 +85,7 @@ public class WordBookActivity extends AppCompatActivity {
         deleteWordBook(target.getId());
         clearInput();
         toggleMode(false);
+        Snackbar.make(view, "단어 삭제 완료", Snackbar.LENGTH_LONG).show();
       }
     });
 
