@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
     setTitle(R.string.app_name);
     dbOpen();
 
+    //  dbInsertTest();
     permission.checkPermissions();
 
     viewstate = viewState.NORMAL;
@@ -206,14 +207,22 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void dbInsertTest(){
-    dbHelper.insertHistory("Hello, This is your Home!","안녕, 여긴 당신의 집!");
-    dbHelper.insertHistory("An Hyeon Mo gone","잘 가 안현모");
-    dbHelper.insertHistory("Hello, This is your Home!","안녕, 여긴 당신의 집!");
-    dbHelper.insertHistory("An hyeon Mo gone","잘 가 안현모");
-    dbHelper.insertHistory("Hello, This is your Home!","안녕, 여긴 당신의 집!");
-    dbHelper.insertHistory("An hyeon Mo gone","잘 가 안현모");
-    dbHelper.insertHistory("Hello, This is your Home!","안녕, 여긴 당신의 집!");
-    dbHelper.insertHistory("An hyeon Mo gone","잘 가 안현모");
+    dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
+            "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠");
+    dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
+                    "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
+                    "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
+            "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value");dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
+            "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠");
+    dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
+                    "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
+                    "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
+            "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value");dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
+            "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠");
+    dbHelper.insertHistory("Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
+                    "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value" +
+                    "Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value?",
+            "안녕, 여긴 당신의 집!, 그리고 돌아갈 장소가 될 수 있습니다. 아마도요. 길이를 채우기 위한 공작일 뿐이죠Is it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant valueIs it possible to write some kind of a filter, that makes postgres's RANDOM() return always constant value");
   }
   public void startOcrTaskActivity(Uri resultImageUri) {
     Intent ocrTaskActivityIntent = new Intent(getApplicationContext(), OCRTaskActivity.class);
@@ -341,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
       new ExcludeStringTranslate(getApplicationContext(), dbHelper, translateTextView);
     translatingClass.setOriginalString(inputEditText.getText().toString());
     translatingClass.translate();
+
   }
 
   public void clickShareButton(View view) {

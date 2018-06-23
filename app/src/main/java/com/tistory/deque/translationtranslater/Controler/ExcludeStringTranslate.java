@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tistory.deque.translationtranslater.Activity.MainActivity;
 import com.tistory.deque.translationtranslater.Model.DB.DBOpenHelper;
 import com.tistory.deque.translationtranslater.Model.ExcludingMember;
 
@@ -48,6 +49,7 @@ public class ExcludeStringTranslate {
     this.translatedText = translatedText;
     unHashingText();
     translatedTextView.setText(this.translatedText);
+    dbHelper.insertHistory(originalText,translatedText);
   }
 
   private void doHashingText() {

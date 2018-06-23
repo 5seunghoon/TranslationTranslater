@@ -10,7 +10,9 @@ import android.util.Log;
 import com.tistory.deque.translationtranslater.Model.ExcludingMember;
 import com.tistory.deque.translationtranslater.Model.HistoryItem;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by HELLOEARTH on 2018-04-02.
@@ -28,8 +30,8 @@ public class DBOpenHelper extends SQLiteOpenHelper{
   public static final String TRANSLATED_WORD_KEY = "TRANSLATED_WORD";
   public static final String ORIGINAL_PASSAGE = "ORIGINAL_PASSAGE";
   public static final String TRANSLATED_PASSAGE = "TRANSLATED_PASSAGE";
-
-  public static int dbVersion = 2;
+  public static final String REGISTER_TIME = "REGISTER_TIME";
+  public static int dbVersion = 3;
 
   private DBOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
     super(context, name, factory, version);
@@ -87,7 +89,7 @@ public class DBOpenHelper extends SQLiteOpenHelper{
     }
 
     sql = "CREATE TABLE IF NOT EXISTS " + TABLE_HISTORY + "(_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            ORIGINAL_PASSAGE + " TEXT, " + TRANSLATED_PASSAGE + " TEXT)";
+            ORIGINAL_PASSAGE + " TEXT, " + TRANSLATED_PASSAGE + " TEXT, " + REGISTER_TIME +" TEXT)";
     try{
       db.execSQL(sql);
       Log.d(TAG, "create db : " + TABLE_HISTORY);
@@ -112,19 +114,27 @@ public class DBOpenHelper extends SQLiteOpenHelper{
 
   public boolean insertHistory(String originalPhrase, String translatedPhrase){
     ContentValues wordValue = new ContentValues();
+
+    Date timeNow = new Date();
+    SimpleDateFormat tempDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    String registerTime = tempDate.format(timeNow);
+
     wordValue.put(ORIGINAL_PASSAGE, originalPhrase);
     wordValue.put(TRANSLATED_PASSAGE, translatedPhrase);
+    wordValue.put(REGISTER_TIME, registerTime);
+
     long result = db.insert(TABLE_HISTORY, null, wordValue);
     if(result == -1){
-      Log.d(TAG, "insert error : orig : " + originalPhrase + " , trans : " + translatedPhrase);
+      Log.d(TAG, "insert error : orig : " + originalPhrase + " , trans : " + translatedPhrase + " , Time : " + registerTime);
       return false;
     }
     else{
-      Log.d(TAG, "insert success : orig : " + originalPhrase + " , trans : " + translatedPhrase);
+      Log.d(TAG, "insert success : orig : " + originalPhrase + " , trans : " + translatedPhrase+ " , Time : " + registerTime);
       return true;
     }
   }
 
+  public void deleteHistory(int id) { db.delete(TABLE_HISTORY, "_ID=?", new String[] {String.valueOf(id)}); }
   public void deleteWord(int id) {
     db.delete(TABLE_NAME, "_ID=?", new String[]{id+""});
   }
@@ -149,8 +159,9 @@ public class DBOpenHelper extends SQLiteOpenHelper{
       int id = results.getInt(0);
       String origin = results.getString(1);
       String translated = results.getString(2);
+      String register_time = results.getString(3);
 
-      HistoryItem newEntry = new HistoryItem(origin,translated);
+      HistoryItem newEntry = new HistoryItem(id, origin,translated,register_time);
       tableIndex++;
 
       HistoryList.add(newEntry);
