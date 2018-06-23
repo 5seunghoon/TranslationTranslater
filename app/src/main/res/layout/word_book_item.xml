@@ -16,6 +16,14 @@
       android:padding="2dp">
 
     <TextView
+        android:id="@+id/word_book_key"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="wordKey"
+        android:textSize="20sp" />
+
+    <TextView
         android:id="@+id/word_book_value"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -24,13 +32,6 @@
         android:text="wordKey"
         android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/word_book_key"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="wordKey"
-        android:textSize="20sp" />
   </LinearLayout>
 
 </LinearLayout>

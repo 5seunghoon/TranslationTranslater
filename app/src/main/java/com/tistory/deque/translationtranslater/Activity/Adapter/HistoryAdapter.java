@@ -42,8 +42,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ItemView
     if (historyItems.get(position).getOpened()) {
       LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600);
       holder.historyItemMainLayout.setLayoutParams(lp);
-      holder.OriginalPhrase.setMaxLines(5);
-      holder.TranslatedPhrase.setMaxLines(5);
+      holder.OriginalPhrase.setMaxLines(8);
+      holder.TranslatedPhrase.setMaxLines(8);
     } else {
       LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 270);
       holder.historyItemMainLayout.setLayoutParams(lp);
@@ -73,8 +73,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ItemView
         if (historyItems.get(position).getOpened() == false) {
           LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600);
           holder.historyItemMainLayout.setLayoutParams(lp);
-          holder.OriginalPhrase.setMaxLines(5);
-          holder.TranslatedPhrase.setMaxLines(5);
+          holder.OriginalPhrase.setMaxLines(8);
+          holder.TranslatedPhrase.setMaxLines(8);
           historyItems.get(position).setOpened(true);
         } else {
           LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 270);
