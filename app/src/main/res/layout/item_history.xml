@@ -35,9 +35,8 @@
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:maxLines="2"
-                    android:text=" TextView akjd a sl jsd asds alk ld kalsk dladkldk las asda sds a adwep aas d sd ad"
                     android:textColor="@color/black"
-                    android:textSize="20dp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/textView"
@@ -61,7 +60,7 @@
                         android:maxLines="1"
                         android:text=" TextView"
                         android:textColor="#777777"
-                        android:textSize="11dp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/RegisterTime"

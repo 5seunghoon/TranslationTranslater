@@ -21,6 +21,7 @@ public class ExcludeStringTranslate {
   private DBOpenHelper dbHelper;
   private Context context;
   private TextView translatedTextView;
+  private String hashedText;
   private String originalText;
   private String translatedText;
 
@@ -48,10 +49,12 @@ public class ExcludeStringTranslate {
     this.translatedText = translatedText;
     unHashingText();
     translatedTextView.setText(this.translatedText);
-    dbHelper.insertHistory(originalText, translatedText);
+    dbHelper.insertHistory(originalText, this.translatedText);
   }
 
   private void doHashingText() {
+    hashedText = originalText;
+    Log.d(tag, "original : " + originalText);
     tableIndex = 1;
     String sql = "SELECT * FROM " + dbHelper.TABLE_NAME + ";";
     Cursor results = null;
@@ -66,10 +69,10 @@ public class ExcludeStringTranslate {
       Log.d(tag, "get2 : " + value);
 
       //if origianalText has match text with origin of database, replace that...
-      originalText = originalText.replaceAll("(?i)" + origin, ExcludingMember.intTo4digitString(tableIndex));
+      hashedText = hashedText.replaceAll("(?i)" + origin, ExcludingMember.intTo4digitString(tableIndex));
       excludingTable.add(new ExcludingMember(ExcludingMember.intTo4digitString(tableIndex), origin, value));
       Log.d(tag, "KEY : " + ExcludingMember.intTo4digitString(tableIndex) + ", ORIGIN : " + origin + ", VALUE : " + value);
-      Log.d(tag, "ORIGINAL TEXT : " + originalText);
+      Log.d(tag, "hashed TEXT : " + hashedText);
       tableIndex++;
 
       results.moveToNext();
@@ -94,7 +97,7 @@ public class ExcludeStringTranslate {
         (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
       NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
       if (networkInfo != null && networkInfo.isConnected()) { //check Internet connection
-        new TranslateAsyncTask(this, sourceLang, targetLang).execute(originalText);
+        new TranslateAsyncTask(this, sourceLang, targetLang).execute(hashedText);
         //Android is not connect network main thread
         //So call TranslateAsyncTask which extends AsyncTask. It execute new thread for connecting network.
       } else {

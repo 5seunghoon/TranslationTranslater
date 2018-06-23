@@ -9,17 +9,18 @@ public class ExcludingMember {
   private String key;
   private String origin;
   private String value;
-  private final static String PREDIX = "1234";
+  private final static String PREDIX = "\"1234";
+  private final static String POSTDIX = "\"";
 
   public static String intTo4digitString(int value) {
     if (value <= 9) {
-      return PREDIX + "000" + String.valueOf(value);
+      return PREDIX + "000" + String.valueOf(value) + POSTDIX;
     } else if (value <= 99) {
-      return PREDIX + "00" + String.valueOf(value);
+      return PREDIX + "00" + String.valueOf(value) + POSTDIX;
     } else if (value <= 999) {
-      return PREDIX + "0" + String.valueOf(value);
+      return PREDIX + "0" + String.valueOf(value) + POSTDIX;
     } else {
-      return String.valueOf(value);
+      return PREDIX + String.valueOf(value) + POSTDIX;
     }
   }
 
