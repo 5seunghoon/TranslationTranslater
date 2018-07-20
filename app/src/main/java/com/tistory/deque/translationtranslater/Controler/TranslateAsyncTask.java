@@ -20,8 +20,8 @@ import java.net.URLEncoder;
 
 public class TranslateAsyncTask extends AsyncTask<String, String, String> {
   private final String TAG = "TranslateAsyncTask";
-  private final String clientId = "apaShxAPOVRY4Rm_auHO";
-  private final String clientSecret = "Gjkp5UpH5o";
+  private final String clientId = "INSERT YOUR NAVER DEVELOPER API CLIENT ID";
+  private final String clientSecret = "INSERT YOUR NAVER DEVELOPER API CLIENT SECRET";
 
   private String resultString;
   private String sourceLang;

@@ -43,7 +43,7 @@ public class OCRTask {
    * 3. call RUN()
    */
 
-  private static final String CLOUD_VISION_API_KEY = "AIzaSyB3Ccj7Bd-QJt_zv2vS7ftc-siVgclrm3w";
+  private static final String CLOUD_VISION_API_KEY = "INSERT YOUR GOOGLE CLOUD VISION API KEY";
   private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
   private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
   private static final int MAX_LABEL_RESULTS = 10;
