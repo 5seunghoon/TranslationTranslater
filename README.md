@@ -1,4 +1,4 @@
-# TranslationTranslater
+# Translation Translater
 
 This translater can set your own wordbook, and you can see translated text better than other translater.
 
@@ -17,7 +17,9 @@ This translater can set your own wordbook, and you can see translated text bette
 * For use ocr function, can read original text from image.
 
 
-<한국어>
+## 한국어
+
+# 번역을 번역하다
 
 ### 사용 API
 * Naver PAPAGO NMT API
