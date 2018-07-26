@@ -2,6 +2,9 @@
 
 This translater can set your own wordbook, and you can see translated text better than other translater.
 
+### Slide Share (Korean)
+https://www.slideshare.net/SeunghoonOh6/translation-translator-107552955
+
 ### Video (Youtube)
 [![Video Label](http://img.youtube.com/vi/s_43csgpwTc/0.jpg)](https://www.youtube.com/watch?v=s_43csgpwTc)
 
